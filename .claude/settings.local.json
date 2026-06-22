@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -in \"Claude\\\\|D:\\\\\\\\\\\\\\\\NOOR\" \"Presentation/Nop.Web/App_Data/appsettings.json\")",
+      "Read(//d/NOOR/nopCommerce_4.90.4_Source/src/Presentation/Nop.Web/**)",
+      "Read(//d/NOOR/nopCommerce_4.90.4_Source/src/Presentation/Nop.Web/Themes/NoorTheme1/Content/css/**)",
+      "Bash(awk '/class ProductPriceModel/,/^ }/' Presentation/Nop.Web/Models/Catalog/ProductOverviewModel.cs)",
+      "PowerShell(Get-Process *)",
+      "PowerShell(Get-NetTCPConnection *)",
+      "PowerShell(Stop-Process *)",
+      "Bash(git init *)",
+      "Bash(git config *)",
+      "Bash(git add *)",
+      "Bash(git commit -q -m ' *)"
+    ]
+  }
+}

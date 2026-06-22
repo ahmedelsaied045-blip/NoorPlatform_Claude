@@ -1,0 +1,34 @@
+@model IList<CategoryModel>
+
+@using Nop.Core.Domain.Catalog
+
+@{
+    var ar = await Html.ShouldUseRtlThemeAsync();
+}
+
+@if (Model.Count > 0)
+{
+    <section class="category-grid home-page-category-grid">
+        <div class="noor-section__head">
+            <span class="noor-eyebrow">@(ar ? "الفئات" : "Categories")</span>
+            <h2 class="noor-section__title">@(ar ? "تسوق حسب الفئة" : "Shop by category")</h2>
+        </div>
+        <div class="item-grid">
+            @foreach (var item in Model)
+            {
+                var url = await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = item.SeName });
+                <article class="item-box">
+                    <a class="noor-cat-link" href="@url" title="@item.PictureModel.Title">
+                        <div class="picture">
+                            <img alt="@item.PictureModel.AlternateText" src="@item.PictureModel.ImageUrl" title="@item.PictureModel.Title" loading="lazy" />
+                        </div>
+                        <h2 class="title">
+                            <span>@item.Name</span>
+                            <span class="noor-cat-arrow" aria-hidden="true">@(ar ? "‹" : "›")</span>
+                        </h2>
+                    </a>
+                </article>
+            }
+        </div>
+    </section>
+}

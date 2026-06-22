@@ -1,0 +1,139 @@
+@using Nop.Web.Framework.Mvc.Routing
+@{
+    // Arabic visitors get RTL/Arabic copy; everyone else gets English.
+    var ar = await Html.ShouldUseRtlThemeAsync();
+}
+
+@* ===================== FEATURES ===================== *@
+<section class="noor-section noor-features">
+    <div class="noor-section__head">
+        <span class="noor-eyebrow">@(ar ? "لماذا نور" : "Why Noor")</span>
+        <h2 class="noor-section__title">@(ar ? "مميزات تجعلنا الأفضل" : "What makes us the best")</h2>
+        <p class="noor-section__sub">@(ar ? "نقدّم لك تجربة تسوق متكاملة من البداية حتى باب منزلك" : "A complete shopping experience, from browsing to your doorstep")</p>
+    </div>
+    <div class="noor-features__grid">
+        <article class="noor-card noor-feature">
+            <span class="noor-feature__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            </span>
+            <h3>@(ar ? "شحن سريع" : "Fast shipping")</h3>
+            <p>@(ar ? "توصيل لجميع المحافظات خلال أيام معدودة" : "Delivery to all governorates within a few days")</p>
+        </article>
+        <article class="noor-card noor-feature">
+            <span class="noor-feature__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+            </span>
+            <h3>@(ar ? "ضمان الجودة" : "Quality guarantee")</h3>
+            <p>@(ar ? "منتجات إضاءة أصلية بأعلى معايير الجودة" : "Genuine lighting products held to the highest standards")</p>
+        </article>
+        <article class="noor-card noor-feature">
+            <span class="noor-feature__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            </span>
+            <h3>@(ar ? "دعم على مدار الساعة" : "24/7 support")</h3>
+            <p>@(ar ? "فريق خدمة عملاء جاهز للرد على استفساراتك" : "A customer-care team ready to answer your questions")</p>
+        </article>
+        <article class="noor-card noor-feature">
+            <span class="noor-feature__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <h3>@(ar ? "دفع آمن" : "Secure payment")</h3>
+            <p>@(ar ? "وسائل دفع متعددة وآمنة بنسبة 100%" : "Multiple, 100% secure payment methods")</p>
+        </article>
+    </div>
+</section>
+
+@* ===================== STATS ===================== *@
+<section class="noor-section noor-stats">
+    <div class="noor-stats__grid">
+        <div class="noor-stat">
+            <span class="noor-stat__num" data-count="50">+50</span>
+            <span class="noor-stat__label">@(ar ? "منتج مميز" : "Featured products")</span>
+        </div>
+        <div class="noor-stat">
+            <span class="noor-stat__num" data-count="100">+100</span>
+            <span class="noor-stat__label">@(ar ? "عميل سعيد" : "Happy customers")</span>
+        </div>
+        <div class="noor-stat">
+            <span class="noor-stat__num" data-count="15">+15</span>
+            <span class="noor-stat__label">@(ar ? "تصنيف" : "Categories")</span>
+        </div>
+        <div class="noor-stat">
+            <span class="noor-stat__num" data-count="5">+5</span>
+            <span class="noor-stat__label">@(ar ? "سنوات خبرة" : "Years of experience")</span>
+        </div>
+    </div>
+</section>
+
+ 
+
+@* ===================== CONTACT ===================== *@
+<section id="noor-contact" class="noor-section noor-contact">
+    <div class="noor-section__head">
+        <span class="noor-eyebrow">@(ar ? "نحن هنا" : "Get in touch")</span>
+        <h2 class="noor-section__title">@(ar ? "تواصل معنا" : "Contact us")</h2>
+        <p class="noor-section__sub">@(ar ? "يسعدنا تواصلك معنا في أي وقت" : "We'd love to hear from you anytime")</p>
+    </div>
+    <div class="noor-contact__grid">
+        <div class="noor-contact__info">
+            <div class="noor-card noor-contact__item">
+                <span class="noor-contact__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.69 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.33 1.85.56 2.81.69A2 2 0 0 1 22 16.92z"/></svg></span>
+                <div><strong>@(ar ? "الهاتف" : "Phone")</strong><span dir="ltr">+20 100 000 0000</span></div>
+            </div>
+            <div class="noor-card noor-contact__item">
+                <span class="noor-contact__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></span>
+                <div><strong>@(ar ? "البريد الإلكتروني" : "Email")</strong><span dir="ltr">info@@noor-eg.store</span></div>
+            </div>
+            <div class="noor-card noor-contact__item">
+                <span class="noor-contact__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+                <div><strong>@(ar ? "العنوان" : "Address")</strong><span>@(ar ? "القاهرة، مصر" : "Cairo, Egypt")</span></div>
+            </div>
+            <div class="noor-contact__map">
+                <iframe title="map" src="https://www.google.com/maps?q=Cairo,Egypt&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <form class="noor-card noor-contact__form" asp-route="@NopRouteNames.General.CONTACT_US" method="post">
+            <h3>@(ar ? "أرسل لنا رسالة" : "Send us a message")</h3>
+            <div class="noor-field">
+                <label for="noor-c-name">@(ar ? "الاسم بالكامل" : "Full name")</label>
+                <input id="noor-c-name" name="FullName" type="text" required />
+            </div>
+            <div class="noor-field">
+                <label for="noor-c-email">@(ar ? "البريد الإلكتروني" : "Email")</label>
+                <input id="noor-c-email" name="Email" type="email" required />
+            </div>
+            <div class="noor-field">
+                <label for="noor-c-subject">@(ar ? "الموضوع" : "Subject")</label>
+                <input id="noor-c-subject" name="Subject" type="text" />
+            </div>
+            <div class="noor-field">
+                <label for="noor-c-msg">@(ar ? "رسالتك" : "Your message")</label>
+                <textarea id="noor-c-msg" name="Enquiry" rows="5" required></textarea>
+            </div>
+            <button type="submit" name="send-email" class="button-1 noor-contact__submit">@(ar ? "إرسال" : "Send message")</button>
+        </form>
+    </div>
+</section>
+
+<script asp-location="Footer">
+    (function () {
+        var nums = document.querySelectorAll('.noor-stat__num[data-count]');
+        if (!nums.length || !('IntersectionObserver' in window)) return;
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (!e.isIntersecting) return;
+                io.unobserve(e.target);
+                var el = e.target, target = parseInt(el.getAttribute('data-count'), 10) || 0, start = null;
+                function tick(t) {
+                    if (!start) start = t;
+                    var p = Math.min((t - start) / 1200, 1);
+                    el.textContent = '+' + Math.floor(p * target);
+                    if (p < 1) requestAnimationFrame(tick);
+                }
+                requestAnimationFrame(tick);
+            });
+        }, { threshold: 0.4 });
+        nums.forEach(function (n) { io.observe(n); });
+    })();
+</script>

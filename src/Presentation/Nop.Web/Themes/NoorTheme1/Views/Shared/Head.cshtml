@@ -1,0 +1,33 @@
+﻿@using Nop.Core.Domain.Catalog
+@using Nop.Services.Helpers
+
+@inject CatalogSettings catalogSettings
+@inject IThemeContext themeContext
+@inject IUserAgentHelper userAgentHelper
+
+@{
+    Layout ="";
+    var themeName = await themeContext.GetWorkingThemeNameAsync();
+    var supportRtl = await Html.ShouldUseRtlThemeAsync();
+
+    //add main CSS file
+    NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/styles{(supportRtl ? ".rtl" : "")}.css");
+
+    // Noor Lighting custom styles
+    NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/noor-lighting.css");
+
+    // Noor Lighting carousel (home-page category/product navigation)
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/noor-carousel.js", excludeFromBundle: true);
+
+    // Arabic font
+    NopHtml.AppendCssFileParts("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap", excludeFromBundle: true);
+    
+    //add swiper css file
+    if (catalogSettings.DisplayAllPicturesOnCatalogPages)
+    {
+        NopHtml.AppendCssFileParts("~/lib_npm/swiper/swiper-bundle.min.css");
+    }
+
+    //add jQuery UI css file
+    NopHtml.AppendCssFileParts("~/lib_npm/jquery-ui-dist/jquery-ui.min.css");
+}
