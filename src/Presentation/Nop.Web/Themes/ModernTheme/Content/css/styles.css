@@ -8398,6 +8398,7 @@ label, label + * {
 
   .search-box {
     display: table-cell;
+    padding-left: 100px;
     text-align: left;
     vertical-align: middle;
   }

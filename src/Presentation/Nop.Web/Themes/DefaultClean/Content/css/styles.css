@@ -8311,9 +8311,7 @@ label, label + * {
   }
 
   .header-logo {
-    display: table-cell;
-    
-    vertical-align: middle;
+    display: table-cell;  
     font-size: 0;
   }
 

@@ -556,7 +556,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .header-upper {
-    display: block !important;
+    display: block !important;  
     align-items: center;
     justify-content: space-between;
     width: 100%;

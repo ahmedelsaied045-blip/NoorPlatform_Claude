@@ -8390,8 +8390,7 @@ label, label + * {
   }
 
   .header-logo {
-    display: table-cell;
-    text-align: right;
+    display: table-cell; 
     vertical-align: middle;
     font-size: 0;
   }
@@ -8399,6 +8398,7 @@ label, label + * {
   .search-box {
     display: table-cell;
     text-align: left;
+    padding-left: 100px;
     vertical-align: middle;
   }
 
