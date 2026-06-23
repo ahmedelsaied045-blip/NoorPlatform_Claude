@@ -244,6 +244,13 @@ h1, h2, h3, h4, h5, h6 {
   max-width: none;
   margin: 0;
   padding: 0 30px;
+  border-bottom: 2px solid var(--noor-gold);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.menu {
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 .menu__toggle {
@@ -265,6 +272,7 @@ h1, h2, h3, h4, h5, h6 {
 .menu__item-toggle {
   color: var(--noor-white);
   font-family: var(--noor-font);
+  font-weight: 700;
   padding: 16px 20px;
 }
 
@@ -277,7 +285,19 @@ h1, h2, h3, h4, h5, h6 {
   transition: color 0.2s;
 }
 
-.menu__link:hover {
+/* Top-level bar links: bold and prominent.
+   Covers both plain items (.menu__link) and dropdown items
+   whose link is nested inside .menu__item-toggle, so they match. */
+.menu > .menu__item > .menu__link,
+.menu > .menu__item.menu-dropdown > .menu__item-toggle,
+.menu > .menu__item.menu-dropdown > .menu__item-toggle > .menu__link {
+  color: var(--noor-white);
+  font-weight: 700;
+}
+
+.menu__link:hover,
+.menu > .menu__item.menu-dropdown:hover > .menu__item-toggle,
+.menu > .menu__item.menu-dropdown:hover > .menu__item-toggle > .menu__link {
   color: var(--noor-gold);
 }
 
@@ -293,21 +313,98 @@ h1, h2, h3, h4, h5, h6 {
 .menu__grid-view,
 .menu__list-view {
   background-color: var(--noor-white);
-  border-radius: var(--noor-radius);
+  border-radius: 0 0 var(--noor-radius) var(--noor-radius);
+  border-top: 3px solid var(--noor-gold);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
 }
 
 .menu__list-view .menu__link {
   color: var(--noor-text);
+  font-weight: 500;
+  border-radius: 6px;
+  margin: 0 6px;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .menu__list-view .menu__link:hover {
-  background-color: var(--noor-bg);
-  color: var(--noor-gold);
+  background-color: var(--noor-gold-light);
+  color: var(--noor-gold-hover);
 }
 
 .menu__item:hover > .menu__item-toggle,
 .menu__link:hover {
   color: var(--noor-gold);
+}
+
+/* ---- Sidebar / block lists (ul.list) ---- */
+
+.block .list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.block .list li {
+  padding: 0;
+  list-style: none;
+}
+
+.block .list a {
+  display: block;
+  position: relative;
+  padding: 10px 14px;
+  font-family: var(--noor-font);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--noor-text);
+  border-radius: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease, padding 0.2s ease;
+}
+
+/* gold accent bar that grows on hover / active (replaces the old square bullet) */
+.block .list a::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  inset-inline-start: 4px;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 0;
+  border-radius: 2px;
+  background-color: var(--noor-gold);
+  transition: height 0.2s ease;
+}
+
+.block .list a:hover,
+.block .list a:focus {
+  background-color: var(--noor-gold-light);
+  color: var(--noor-gold-hover);
+  padding-inline-start: 18px;
+}
+
+.block .list a:hover::before,
+.block .list a:focus::before,
+.block .list .active > a::before {
+  height: 55%;
+}
+
+.block .list .active > a {
+  background-color: var(--noor-gold-light);
+  color: var(--noor-gold-hover);
+  font-weight: 700;
+  padding-inline-start: 18px;
+}
+
+/* nested sub-categories */
+.block .list .sublist {
+  margin: 4px 0;
+  padding-inline-start: 12px;
+  border-inline-start: 1px solid #ece3d2;
+}
+
+.block .list .sublist a {
+  font-size: 14px;
 }
 
 /* ---- Hero Banner ---- */
@@ -712,6 +809,7 @@ html[dir="rtl"] .search-box form,
 /* Consistent edge padding + vertical rhythm for all sections */
 .home-page .page-body {
   padding: 28px 100px 72px;
+  background-color: #faf5ec;
 }
 
 .home-page .page-body > * {
@@ -760,8 +858,9 @@ html[dir="rtl"] .search-box form,
   background: var(--noor-gold);
 }
 
-/* Modern product cards */
-.home-page .item-box .product-item {
+/* Modern product cards — all grid views (home, category, search,
+   related, cross-sell, recently-viewed). List view keeps its row layout. */
+.product-grid .item-box .product-item {
   display: flex;
   flex-direction: column;
   background: var(--noor-white);
@@ -773,13 +872,13 @@ html[dir="rtl"] .search-box form,
   transition: transform .3s ease, box-shadow .3s ease;
 }
 
-.home-page .item-box .product-item:hover {
+.product-grid .item-box .product-item:hover {
   transform: translateY(-6px);
   box-shadow: 0 16px 36px rgba(26, 26, 26, 0.14);
 }
 
 /* Picture: consistent square area, gentle zoom on hover */
-.home-page .item-box .product-item .picture {
+.product-grid .item-box .product-item .picture {
   position: relative;
   margin: 0;
   aspect-ratio: 1 / 1;
@@ -787,14 +886,14 @@ html[dir="rtl"] .search-box form,
   overflow: hidden;
 }
 
-.home-page .item-box .product-item .picture > a,
-.home-page .item-box .product-item .picture .swiper {
+.product-grid .item-box .product-item .picture > a,
+.product-grid .item-box .product-item .picture .swiper {
   display: block;
   width: 100%;
   height: 100%;
 }
 
-.home-page .item-box .product-item .picture img {
+.product-grid .item-box .product-item .picture img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -802,12 +901,12 @@ html[dir="rtl"] .search-box form,
   transition: transform .5s ease;
 }
 
-.home-page .item-box .product-item:hover .picture img {
+.product-grid .item-box .product-item:hover .picture img {
   transform: scale(1.06);
 }
 
 /* Details fill the rest so price/buttons align across cards */
-.home-page .item-box .product-item .details {
+.product-grid .item-box .product-item .details {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -815,14 +914,14 @@ html[dir="rtl"] .search-box form,
   text-align: start;
 }
 
-.home-page .item-box .product-item .product-title {
+.product-grid .item-box .product-item .product-title {
   margin: 0 0 8px;
   min-height: 42px;
   font-size: 15px;
   line-height: 1.4;
 }
 
-.home-page .item-box .product-item .product-title a {
+.product-grid .item-box .product-item .product-title a {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -831,27 +930,46 @@ html[dir="rtl"] .search-box form,
   font-weight: 600;
 }
 
-.home-page .item-box .product-item .product-title a:hover {
+.product-grid .item-box .product-item .product-title a:hover {
   color: var(--noor-gold);
 }
 
-.home-page .item-box .product-item .add-info {
+/* SKU + short description: muted, tidy */
+.product-grid .item-box .product-item .sku {
+  font-size: 12px;
+  color: var(--noor-text-muted);
+  margin: 0 0 6px;
+}
+
+.product-grid .item-box .product-item .description:not([data-short-description]) {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--noor-text-muted);
+  margin: 0 0 10px;
+  height: auto;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-grid .item-box .product-item .add-info {
   margin-top: auto;
 }
 
 /* Prices */
-.home-page .item-box .product-item .prices {
+.product-grid .item-box .product-item .prices {
   margin: 0 0 12px;
 }
 
-.home-page .item-box .product-item .actual-price {
+.product-grid .item-box .product-item .actual-price {
   font-size: 18px;
   font-weight: 800;
   color: var(--noor-gold);
   margin: 0;
 }
 
-.home-page .item-box .product-item .old-price {
+.product-grid .item-box .product-item .old-price {
   font-size: 14px;
   color: var(--noor-text-muted);
   text-decoration: line-through;
@@ -859,13 +977,13 @@ html[dir="rtl"] .search-box form,
 }
 
 /* Buttons: prominent add-to-cart + tidy icon buttons */
-.home-page .item-box .product-item .buttons {
+.product-grid .item-box .product-item .buttons {
   display: flex;
   align-items: stretch;
   gap: 8px;
 }
 
-.home-page .item-box .product-item .product-box-add-to-cart-button {
+.product-grid .item-box .product-item .product-box-add-to-cart-button {
   flex: 1;
   width: auto;
   height: 42px;
@@ -876,13 +994,13 @@ html[dir="rtl"] .search-box form,
   text-transform: none;
 }
 
-.home-page .item-box .product-item .product-box-add-to-cart-button:hover,
-.home-page .item-box .product-item .product-box-add-to-cart-button:focus {
+.product-grid .item-box .product-item .product-box-add-to-cart-button:hover,
+.product-grid .item-box .product-item .product-box-add-to-cart-button:focus {
   background-color: var(--noor-gold-hover);
 }
 
-.home-page .item-box .product-item .add-to-compare-list-button,
-.home-page .item-box .product-item .add-to-wishlist-button {
+.product-grid .item-box .product-item .add-to-compare-list-button,
+.product-grid .item-box .product-item .add-to-wishlist-button {
   flex: 0 0 auto;
   width: 42px;
   height: 42px;
@@ -891,17 +1009,181 @@ html[dir="rtl"] .search-box form,
   background-color: #fff;
 }
 
-.home-page .item-box .product-item .add-to-compare-list-button:hover,
-.home-page .item-box .product-item .add-to-wishlist-button:hover,
-.home-page .item-box .product-item .add-to-compare-list-button:focus,
-.home-page .item-box .product-item .add-to-wishlist-button:focus {
+.product-grid .item-box .product-item .add-to-compare-list-button:hover,
+.product-grid .item-box .product-item .add-to-wishlist-button:hover,
+.product-grid .item-box .product-item .add-to-compare-list-button:focus,
+.product-grid .item-box .product-item .add-to-wishlist-button:focus {
   border-color: var(--noor-gold) !important;
   background-color: var(--noor-gold-light);
 }
 
 /* Rating stars spacing */
-.home-page .item-box .product-item .product-rating-box {
+.product-grid .item-box .product-item .product-rating-box {
   margin: 0 0 10px;
+}
+
+/* ===== List view: matching card treatment (horizontal on desktop) ===== */
+
+/* Card shell + appearance (all widths) */
+.product-list .item-box {
+  margin: 0 0 20px;
+}
+
+.product-list .item-box .product-item {
+  background: var(--noor-white);
+  border: 1px solid #eee;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 6px 20px rgba(26, 26, 26, 0.06);
+  overflow: hidden;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.product-list .item-box .product-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(26, 26, 26, 0.14);
+}
+
+/* drop the float clearfix from the old layout */
+.product-list .item-box .product-item::after {
+  content: none;
+}
+
+.product-list .item-box .product-item .picture {
+  position: relative;
+  margin: 0;
+  background: #f7f7f5;
+  overflow: hidden;
+}
+
+.product-list .item-box .product-item .picture img {
+  width: 100%;
+  object-fit: contain;
+  padding: 16px;
+  transition: transform .5s ease;
+}
+
+.product-list .item-box .product-item:hover .picture img {
+  transform: scale(1.05);
+}
+
+.product-list .item-box .product-item .details {
+  padding: 20px 24px;
+  text-align: start;
+}
+
+.product-list .item-box .product-item .product-title {
+  height: auto;
+  margin: 0 0 10px;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.product-list .item-box .product-item .product-title a {
+  color: var(--noor-text);
+  font-weight: 700;
+}
+
+.product-list .item-box .product-item .product-title a:hover {
+  color: var(--noor-gold);
+}
+
+.product-list .item-box .product-item .description {
+  margin: 0 0 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--noor-text-muted);
+}
+
+.product-list .item-box .product-item .prices {
+  height: auto;
+  margin: 0 0 16px;
+}
+
+.product-list .item-box .product-item .actual-price {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--noor-gold);
+}
+
+.product-list .item-box .product-item .old-price {
+  font-size: 15px;
+  color: var(--noor-text-muted);
+  text-decoration: line-through;
+  margin: 0 0 0 8px;
+}
+
+.product-list .item-box .product-item .buttons {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.product-list .item-box .product-item .product-box-add-to-cart-button {
+  width: auto;
+  min-width: 170px;
+  height: 44px;
+  padding: 0 24px;
+  border-radius: 8px;
+  background-color: var(--noor-gold);
+  color: var(--noor-black);
+  font-weight: 700;
+  text-transform: none;
+}
+
+.product-list .item-box .product-item .product-box-add-to-cart-button:hover,
+.product-list .item-box .product-item .product-box-add-to-cart-button:focus {
+  background-color: var(--noor-gold-hover);
+}
+
+.product-list .item-box .product-item .add-to-compare-list-button,
+.product-list .item-box .product-item .add-to-wishlist-button {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #e4e4e4 !important;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.product-list .item-box .product-item .add-to-compare-list-button:hover,
+.product-list .item-box .product-item .add-to-wishlist-button:hover,
+.product-list .item-box .product-item .add-to-compare-list-button:focus,
+.product-list .item-box .product-item .add-to-wishlist-button:focus {
+  border-color: var(--noor-gold) !important;
+  background-color: var(--noor-gold-light);
+}
+
+/* Horizontal row layout on desktop (matches base list breakpoint) */
+@media all and (min-width: 769px) {
+  .product-list .item-box .product-item {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .product-list .item-box .product-item .picture {
+    float: none;
+    flex: 0 0 240px;
+    width: 240px;
+    aspect-ratio: 1 / 1;
+  }
+
+  .product-list .item-box .product-item .picture img {
+    height: 100%;
+  }
+
+  .product-list .item-box .product-item .picture + .details,
+  .product-list .item-box .product-item .details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin: 0;
+  }
+
+  .product-list .item-box .product-item .add-info {
+    margin-top: auto;
+  }
 }
 
 /* Discount badge (shown when a product has an old price) */
@@ -1426,4 +1708,2209 @@ html[dir="rtl"] .search-box form,
   .noor-contact__map {
     height: 260px;
   }
+}
+
+/* ============================================================
+   Order summary / shopping cart — modern look
+   ============================================================ */
+
+.order-summary-content {
+  color: var(--noor-text);
+}
+
+/* Product links inside the cart */
+.order-summary-content .cart .product a.product-name {
+  font-weight: 700;
+  color: var(--noor-text);
+}
+
+.order-summary-content .cart .product a.product-name:hover,
+.order-summary-content .cart .product a.product-name:focus {
+  color: var(--noor-gold);
+  text-decoration: none;
+}
+
+.order-summary-content .cart .attributes {
+  font-size: 13px;
+  color: var(--noor-text-muted);
+  margin-top: 6px;
+}
+
+/* Product thumbnail */
+.order-summary-content .cart td.product-picture img {
+  border-radius: 10px;
+  border: 1px solid #efe7d8;
+  background: #faf7f1;
+}
+
+/* Unit price & subtotal emphasis */
+.order-summary-content .cart .product-unit-price,
+.order-summary-content .cart .product-subtotal {
+  font-weight: 700;
+  color: var(--noor-text);
+}
+
+.order-summary-content .cart .product-subtotal {
+  color: var(--noor-gold);
+}
+
+.order-summary-content .cart td.subtotal .discount,
+.order-summary-content .cart td.subtotal .discount-additional-info {
+  color: var(--noor-gold-hover);
+  font-style: normal;
+}
+
+/* Quantity input */
+.order-summary-content .cart .qty-input,
+.order-summary-content .cart td.quantity input,
+.order-summary-content .cart .qty-dropdown {
+  height: 40px;
+  border: 1px solid #e0d8cc;
+  border-radius: 8px;
+  background: var(--noor-white);
+  font-family: var(--noor-font);
+  font-weight: 600;
+  color: var(--noor-text);
+}
+
+/* Remove button → soft circular control */
+.order-summary-content .cart .remove-from-cart .remove-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #faf2e2;
+  background-position: center;
+  background-size: 11px;
+  transition: background-color .2s ease, transform .2s ease;
+}
+
+.order-summary-content .cart .remove-from-cart .remove-btn:hover {
+  background-color: var(--noor-gold-light);
+  transform: scale(1.08);
+}
+
+/* Totals → highlighted card */
+.order-summary-content .cart-footer {
+  border-top: none;
+}
+
+.order-summary-content .cart-footer .totals {
+  width: 380px;
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 10px 30px rgba(26, 26, 26, 0.08);
+  padding: 24px;
+}
+
+.order-summary-content .cart-footer .total-info {
+  border-bottom: 1px dashed #e7ddca;
+  padding: 0 0 14px;
+}
+
+.order-summary-content .cart-total td {
+  padding: 7px 0;
+}
+
+.order-summary-content .cart-total .order-total {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--noor-gold);
+  padding-top: 14px;
+}
+
+.order-summary-content .cart-total .order-total strong {
+  font-weight: 800;
+}
+
+/* Checkout button → bold gold pill */
+.order-summary-content .checkout-buttons {
+  padding: 18px 0 0;
+}
+
+.order-summary-content .checkout-button {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 52px;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--noor-gold);
+  color: var(--noor-black);
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: none;
+  box-shadow: 0 8px 20px rgba(229, 168, 68, 0.35);
+  transition: background-color .2s ease, transform .2s ease;
+}
+
+.order-summary-content .checkout-button:hover,
+.order-summary-content .checkout-button:focus {
+  background-color: var(--noor-gold-hover);
+  transform: translateY(-1px);
+}
+
+.order-summary-content .terms-of-service {
+  padding: 0;
+  margin: 4px 0 16px;
+}
+
+.order-summary-content .terms-of-service a {
+  color: var(--noor-gold-hover);
+}
+
+/* Continue shopping / update cart → outlined pills */
+.order-summary-content .common-buttons button,
+.order-summary-content .common-buttons .button-2 {
+  border-radius: 10px;
+  text-transform: none;
+  font-weight: 600;
+}
+
+/* Coupon / gift card boxes → clean cards */
+.order-summary-content .cart-collaterals .deals > div {
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  padding: 18px 20px;
+}
+
+.order-summary-content .cart-collaterals .title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--noor-text);
+}
+
+.order-summary-content .cart-collaterals .coupon-code {
+  display: flex;
+  gap: 8px;
+  overflow: visible;
+}
+
+.order-summary-content .cart-collaterals .coupon-code input[type="text"] {
+  float: none;
+  flex: 1;
+  width: auto;
+  height: 44px;
+  border: 1px solid #e0d8cc;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-family: var(--noor-font);
+}
+
+.order-summary-content .cart-collaterals .coupon-code button[type="submit"],
+.order-summary-content .cart-collaterals .button-2 {
+  float: none;
+  flex: 0 0 auto;
+  width: auto;
+  height: 44px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--noor-gold);
+  color: var(--noor-black);
+  font-weight: 700;
+  text-transform: none;
+}
+
+.order-summary-content .cart-collaterals .coupon-code button[type="submit"]:hover,
+.order-summary-content .cart-collaterals .button-2:hover,
+.order-summary-content .cart-collaterals .button-2:focus {
+  background-color: var(--noor-gold-hover);
+}
+
+/* Empty cart state */
+.order-summary-content .no-data {
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 10px 30px rgba(26, 26, 26, 0.06);
+  padding: 48px 24px;
+  text-align: center;
+  font-size: 16px;
+  color: var(--noor-text-muted);
+}
+
+/* Desktop: card-wrapped table with a dark header */
+@media all and (min-width: 769px) {
+  .order-summary-content .table-wrapper {
+    border: 1px solid #efe7d8;
+    border-radius: var(--noor-radius);
+    box-shadow: 0 10px 30px rgba(26, 26, 26, 0.06);
+    overflow: hidden;
+  }
+
+  .order-summary-content .cart {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .order-summary-content .cart thead th {
+    background-color: var(--noor-black);
+    color: var(--noor-white);
+    border: none;
+    padding: 16px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+  }
+
+  .order-summary-content .cart tbody td {
+    background-color: var(--noor-white);
+    border: none;
+    border-bottom: 1px solid #f1ebdf;
+    padding: 18px 14px;
+    vertical-align: middle;
+  }
+
+  .order-summary-content .cart tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .order-summary-content .cart tbody tr:hover td {
+    background-color: #fdf8ee;
+  }
+
+  /* Deals on one side, totals card on the other */
+  .order-summary-content .cart-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 30px;
+  }
+
+  .order-summary-content .cart-footer::after {
+    content: none;
+  }
+
+  .order-summary-content .cart-collaterals {
+    flex: 1 1 320px;
+    margin: 0;
+  }
+
+  .order-summary-content .cart-footer .totals {
+    flex: 0 0 380px;
+    margin: 0;
+  }
+}
+
+/* Mobile: turn each cart row into its own rounded card */
+@media all and (max-width: 768px) {
+  .order-summary-content .cart tr {
+    border: 1px solid #efe7d8;
+    border-radius: var(--noor-radius);
+    box-shadow: 0 6px 18px rgba(26, 26, 26, 0.06);
+    margin: 20px 0 0;
+    overflow: hidden;
+  }
+
+  .order-summary-content .cart-footer .totals,
+  .order-summary-content .cart-collaterals {
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   Checkout step pages (standard + one-page checkout)
+   ============================================================ */
+
+.checkout-page .page-title h1 {
+  font-weight: 800;
+  color: var(--noor-text);
+}
+
+.checkout-page .section .title,
+.checkout-page .section > h2.title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--noor-text);
+  margin: 0 0 16px;
+}
+
+/* --- Step progress bar --- */
+.order-progress {
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 8px 24px rgba(26, 26, 26, 0.06);
+  padding: 22px 10px;
+}
+
+.order-progress a {
+  font-weight: 600;
+  color: var(--noor-text-muted);
+}
+
+.order-progress a:before {
+  border: 2px solid #e0d8cc;
+  background-color: #fff;
+}
+
+.order-progress li.active-step a {
+  color: var(--noor-text);
+}
+
+.order-progress li.active-step a:before {
+  border-color: var(--noor-gold);
+  background-color: var(--noor-gold-light);
+}
+
+.order-progress li.inactive-step a {
+  opacity: 1;
+  color: #b9b2a6;
+}
+
+.order-progress li.inactive-step a:before {
+  border-color: #ece4d6;
+  opacity: .7;
+}
+
+/* --- Primary checkout buttons → gold pills --- */
+.checkout-page .button-1 {
+  border-radius: 10px;
+  background-color: var(--noor-gold);
+  color: var(--noor-black);
+  font-weight: 700;
+  text-transform: none;
+  box-shadow: 0 8px 20px rgba(229, 168, 68, 0.30);
+  transition: background-color .2s ease, transform .2s ease;
+}
+
+.checkout-page .button-1:hover,
+.checkout-page .button-1:focus {
+  background-color: var(--noor-gold-hover);
+  transform: translateY(-1px);
+}
+
+.checkout-page .button-2 {
+  border-radius: 10px;
+  text-transform: none;
+  font-weight: 600;
+}
+
+/* Tighten the gap before the order summary on step pages */
+.checkout-page .section.order-summary {
+  margin: 48px 0 30px;
+}
+
+/* --- Shipping / payment method selection → cards --- */
+.checkout-page .shipping-method .method-list,
+.checkout-page .payment-method .method-list {
+  max-width: 760px;
+  margin: 0 auto 28px;
+  text-align: start;
+  font-size: 15px;
+}
+
+.checkout-page .shipping-method .method-list li,
+.checkout-page .payment-method .method-list li {
+  margin: 0 0 14px;
+  padding: 16px 20px;
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+
+.checkout-page .shipping-method .method-list li:hover,
+.checkout-page .payment-method .method-list li:hover,
+.checkout-page .shipping-method .method-list li:focus-within,
+.checkout-page .payment-method .method-list li:focus-within {
+  border-color: var(--noor-gold);
+  background-color: #fffdf8;
+  box-shadow: 0 8px 22px rgba(26, 26, 26, 0.06);
+}
+
+.checkout-page .method-list .method-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.checkout-page .method-list li label {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--noor-text);
+  cursor: pointer;
+}
+
+.checkout-page .method-list .method-description,
+.checkout-page .method-list .payment-description {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: var(--noor-text-muted);
+}
+
+.checkout-page .payment-method .payment-logo img {
+  max-height: 40px;
+}
+
+/* --- Address forms & saved addresses → cards --- */
+.checkout-page .enter-address .edit-address,
+.opc .enter-address .edit-address {
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-top: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 8px 24px rgba(26, 26, 26, 0.05);
+  padding: 26px;
+  margin: 0 0 24px;
+}
+
+.checkout-page .address-item ul,
+.checkout-page .order-review-data > div,
+.checkout-page .order-details-area > div,
+.checkout-page .shipment-details-area > div {
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 8px 24px rgba(26, 26, 26, 0.05);
+}
+
+.checkout-page .address-item li.name {
+  color: var(--noor-text);
+}
+
+/* Modern inputs inside checkout forms */
+.checkout-page .enter-address input[type="text"],
+.checkout-page .enter-address input[type="email"],
+.checkout-page .enter-address input[type="tel"],
+.checkout-page .enter-address select,
+.checkout-page .enter-address textarea,
+.opc .enter-address input[type="text"],
+.opc .enter-address input[type="email"],
+.opc .enter-address input[type="tel"],
+.opc .enter-address select,
+.opc .enter-address textarea {
+  min-height: 44px;
+  border: 1px solid #e0d8cc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: var(--noor-font);
+  background: var(--noor-white);
+}
+
+.checkout-page .enter-address input:focus,
+.checkout-page .enter-address select:focus,
+.checkout-page .enter-address textarea:focus,
+.opc .enter-address input:focus,
+.opc .enter-address select:focus {
+  outline: none;
+  border-color: var(--noor-gold);
+  box-shadow: 0 0 0 3px var(--noor-gold-light);
+}
+
+/* "Ship to same address" toggle */
+.checkout-page .ship-to-same-address {
+  background: var(--noor-gold-light);
+  border-radius: var(--noor-radius);
+  padding: 18px 24px;
+}
+
+/* --- Order completed → success card --- */
+.order-completed .details {
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius-lg);
+  box-shadow: 0 12px 32px rgba(26, 26, 26, 0.08);
+  padding: 44px 28px;
+}
+
+.order-completed .details .order-number strong {
+  font-size: 18px;
+  color: var(--noor-text);
+}
+
+.order-completed .details a {
+  color: var(--noor-gold-hover);
+  font-weight: 600;
+}
+
+/* --- One page checkout: accordion --- */
+.opc .step-title {
+  display: flex;
+  align-items: center;
+  margin: 0 0 12px;
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  overflow: hidden;
+}
+
+.opc .allow .step-title {
+  background: var(--noor-white);
+  border-color: var(--noor-gold);
+}
+
+.opc .step-title .number {
+  width: 52px;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: none;
+  background: #f0ece3;
+  color: var(--noor-text-muted);
+  font-weight: 800;
+}
+
+.opc .allow .step-title .number {
+  background: var(--noor-gold);
+  color: var(--noor-black);
+}
+
+.opc .step-title .title {
+  padding: 14px 18px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--noor-text-muted);
+}
+
+.opc .allow .step-title .title {
+  color: var(--noor-text);
+}
+
+.opc .step {
+  text-align: start;
+  background: var(--noor-white);
+  border: 1px solid #f1ebdf;
+  border-radius: var(--noor-radius);
+  padding: 26px;
+  margin: 0 0 18px;
+}
+
+.opc .back-link a {
+  color: var(--noor-text-muted);
+  font-weight: 600;
+}
+
+.opc .back-link a:hover,
+.opc .back-link a:focus {
+  color: var(--noor-gold-hover);
+}
+
+@media all and (min-width: 769px) {
+  /* Method selection sits left, summary card right alignment already handled */
+  .checkout-page .shipping-method .method-list li label,
+  .checkout-page .payment-method .method-list li label {
+    font-size: 16px;
+  }
+}
+
+/* ============================================================
+   Order details / order history / shipment pages
+   ============================================================ */
+
+/* --- Page title + action buttons --- */
+.order-details-page .page-title h1 {
+  font-weight: 800;
+  color: var(--noor-text);
+  border-bottom: 1px solid #efe7d8;
+}
+
+.order-details-page .page-title a {
+  min-width: 0;
+  border-radius: 10px;
+  background-color: var(--noor-text);
+  background-image: none;
+  padding: 10px 20px;
+  font-weight: 600;
+  transition: background-color .2s ease, transform .2s ease;
+}
+
+.order-details-page .page-title a:hover,
+.order-details-page .page-title a:focus {
+  background-color: #000;
+  transform: translateY(-1px);
+}
+
+.order-details-page .page-title a.print-order-button {
+  background-color: var(--noor-gold);
+  color: var(--noor-black);
+}
+
+.order-details-page .page-title a.print-order-button:hover,
+.order-details-page .page-title a.print-order-button:focus {
+  background-color: var(--noor-gold-hover);
+}
+
+.order-details-page .page-title a.cancel-order-button {
+  background-color: #c0392b;
+}
+
+/* --- Order overview banner --- */
+.order-details-page .order-overview {
+  background: var(--noor-gold-light);
+  border: 1px solid #f0e2c4;
+  border-radius: var(--noor-radius);
+  padding: 22px 24px;
+  text-align: start;
+}
+
+.order-details-page .order-overview .order-number {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--noor-text);
+}
+
+.order-details-page .order-overview-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  margin-top: 10px;
+}
+
+.order-details-page .order-overview .order-total strong {
+  font-weight: 800;
+  color: var(--noor-gold-hover);
+}
+
+/* --- Billing / shipping / payment info cards --- */
+.order-details-page .order-details-area {
+  display: grid;
+  gap: 20px;
+  margin: 0 0 30px;
+}
+
+.order-details-page .order-details-area > div {
+  width: auto;
+  max-width: none;
+  margin: 0;
+  background: none;
+  padding: 0;
+  display: grid;
+  gap: 20px;
+}
+
+.order-details-page .billing-info,
+.order-details-page .payment-method-info,
+.order-details-page .shipping-info,
+.order-details-page .shipping-method-info,
+.shipment-details-page .shipment-details-area > div {
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 8px 24px rgba(26, 26, 26, 0.05);
+  padding: 22px 24px;
+}
+
+.order-details-page .order-details-area .title,
+.shipment-details-page .shipment-details-area .title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--noor-text);
+  margin: 0 0 12px;
+}
+
+.order-details-page .info-list li,
+.shipment-details-page .info-list li {
+  padding: 4px 0;
+  color: var(--noor-text-muted);
+}
+
+.order-details-page .info-list li.name {
+  font-weight: 700;
+  color: var(--noor-text);
+}
+
+/* --- Totals card --- */
+.order-details-page .totals.section {
+  width: 380px;
+  padding: 0;
+}
+
+.order-details-page .total-info {
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 10px 30px rgba(26, 26, 26, 0.06);
+  padding: 22px 24px;
+}
+
+.order-details-page .cart-total .order-total td,
+.order-details-page .cart-total tr:last-child td {
+  padding-top: 12px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.order-details-page .cart-total tr:last-child .cart-total-right span,
+.order-details-page .cart-total tr:last-child strong {
+  color: var(--noor-gold-hover);
+}
+
+/* --- Action buttons (reorder / return) --- */
+.order-details-page .actions button {
+  min-width: 0;
+  border-radius: 10px;
+  background-color: #efe7d8;
+  background-image: none;
+  color: var(--noor-text);
+  font-weight: 600;
+  padding: 11px 22px;
+  transition: background-color .2s ease, transform .2s ease;
+}
+
+.order-details-page .actions button:hover,
+.order-details-page .actions button:focus {
+  background-color: #e6dcc7;
+  transform: translateY(-1px);
+}
+
+.order-details-page .actions button:first-child {
+  background-color: var(--noor-gold);
+  color: var(--noor-black);
+}
+
+.order-details-page .actions button:first-child:hover,
+.order-details-page .actions button:first-child:focus {
+  background-color: var(--noor-gold-hover);
+}
+
+/* --- Order history list: each order as a card --- */
+.order-list-page .order-list {
+  display: grid;
+  gap: 18px;
+}
+
+.order-list-page .order-item {
+  margin: 0;
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 8px 24px rgba(26, 26, 26, 0.05);
+  padding: 22px 24px;
+}
+
+.order-list-page .order-item .title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--noor-text);
+  margin: 0 0 12px;
+}
+
+.order-list-page .info {
+  margin: 0 0 16px;
+  border-top: none;
+  background: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 28px;
+  color: var(--noor-text-muted);
+}
+
+.order-list-page .info .order-total {
+  font-weight: 800;
+  color: var(--noor-gold-hover);
+}
+
+/* Order status pill */
+.order-list-page .info .order-status {
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  background: #ece4d6;
+  color: var(--noor-text);
+}
+
+.order-list-page .info .order-status.complete {
+  background: #e3f5e6;
+  color: #1f8a3b;
+}
+
+.order-list-page .info .order-status.processing {
+  background: var(--noor-gold-light);
+  color: var(--noor-gold-hover);
+}
+
+.order-list-page .info .order-status.pending {
+  background: #fdf0d8;
+  color: #b87914;
+}
+
+.order-list-page .info .order-status.cancelled {
+  background: #fbe4e1;
+  color: #c0392b;
+}
+
+.order-list-page .order-filters__input {
+  height: 44px;
+  border: 1px solid #e0d8cc;
+  border-radius: 8px;
+  background: var(--noor-white);
+  font-family: var(--noor-font);
+}
+
+/* --- Shared modern data-table for order detail tables (desktop) --- */
+@media all and (min-width: 769px) {
+  .order-details-page .order-details-area {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+
+  .order-details-page .totals.section {
+    margin-inline-start: auto;
+    margin-inline-end: 0;
+  }
+
+  .order-details-page .table-wrapper,
+  .shipment-details-page .table-wrapper {
+    border: 1px solid #efe7d8;
+    border-radius: var(--noor-radius);
+    box-shadow: 0 8px 24px rgba(26, 26, 26, 0.05);
+    overflow: hidden;
+  }
+
+  .order-details-page .data-table,
+  .shipment-details-page .data-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .order-details-page .data-table thead th,
+  .shipment-details-page .data-table thead th {
+    background-color: var(--noor-black);
+    color: var(--noor-white);
+    border: none;
+    padding: 15px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+  }
+
+  .order-details-page .data-table tbody td,
+  .shipment-details-page .data-table tbody td {
+    background-color: var(--noor-white);
+    border: none;
+    border-bottom: 1px solid #f1ebdf;
+    padding: 16px 14px;
+    vertical-align: middle;
+  }
+
+  .order-details-page .data-table tbody tr:last-child td,
+  .shipment-details-page .data-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .order-details-page .data-table tbody tr:hover td,
+  .shipment-details-page .data-table tbody tr:hover td {
+    background-color: #fdf8ee;
+  }
+
+  .order-details-page .data-table .product a {
+    color: var(--noor-text);
+    font-weight: 700;
+  }
+
+  .order-details-page .data-table .product a:hover {
+    color: var(--noor-gold);
+  }
+}
+
+/* Mobile: order detail tables and order cards stack nicely */
+@media all and (max-width: 768px) {
+  .order-details-page .data-table tr,
+  .shipment-details-page .data-table tr {
+    border: 1px solid #efe7d8;
+    border-radius: var(--noor-radius);
+    box-shadow: 0 6px 18px rgba(26, 26, 26, 0.06);
+    overflow: hidden;
+  }
+
+  .order-details-page .totals.section {
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   Compare products page
+   ============================================================ */
+
+.compare-products-page .page-title h1 {
+  font-weight: 800;
+  color: var(--noor-text);
+}
+
+/* "Clear list" → soft outlined pill */
+.compare-products-page .clear-list {
+  background-color: transparent;
+  border: 1px solid #e2b5ad;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: none;
+  color: #c0392b;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+.compare-products-page .clear-list:hover,
+.compare-products-page .clear-list:focus {
+  background-color: #fbe4e1;
+  color: #c0392b;
+}
+
+/* Card-wrapped, scrollable comparison table */
+.compare-products-page .table-wrapper {
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 10px 30px rgba(26, 26, 26, 0.06);
+  overflow-x: auto;
+  padding: 0;
+}
+
+.compare-products-page .compare-products-table {
+  border-collapse: collapse;
+  width: 100%;
+  background: var(--noor-white);
+}
+
+.compare-products-table td {
+  border: 1px solid #f1ebdf;
+  border-top: none;
+  padding: 18px 20px;
+  text-align: start;
+  vertical-align: top;
+  color: var(--noor-text-muted);
+}
+
+/* First column = sticky labels */
+.compare-products-table td:first-child {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 1;
+  background: #faf7f1;
+  border-inline-start: none;
+}
+
+.compare-products-table td label {
+  font-weight: 700;
+  color: var(--noor-text);
+}
+
+/* Remove row → soft pill button, no icon */
+.compare-products-table .remove-product td {
+  border-bottom: none;
+  text-align: center;
+}
+
+.compare-products-table .remove-button {
+  background: #f6efe2;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--noor-text);
+  transition: background-color .2s ease, color .2s ease;
+}
+
+.compare-products-table .remove-button:hover,
+.compare-products-table .remove-button:focus {
+  background: #fbe4e1;
+  color: #c0392b;
+}
+
+/* Product image */
+.compare-products-table .product-picture td {
+  text-align: center;
+}
+
+.compare-products-table .picture {
+  max-width: 100%;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  border-radius: var(--noor-radius);
+  border: 1px solid #f1ebdf;
+  background: #faf7f1;
+}
+
+.compare-products-table .picture img {
+  padding: 12px;
+}
+
+/* Product name + price emphasis */
+.compare-products-table .product-name td {
+  font-weight: 700;
+}
+
+.compare-products-table .product-name td a {
+  color: var(--noor-text);
+}
+
+.compare-products-table .product-name td a:hover,
+.compare-products-table .product-name td a:focus {
+  color: var(--noor-gold);
+}
+
+.compare-products-table .product-price td {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--noor-gold-hover);
+}
+
+/* Specification group header band */
+.compare-products-table .specification-group td {
+  background: var(--noor-gold-light);
+  border: none;
+  padding: 12px 20px;
+}
+
+.compare-products-table .specification-group td label {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--noor-text);
+}
+
+/* Specification rows: subtle hover for readability */
+.compare-products-table .specification:hover td {
+  background: #fdf8ee;
+}
+
+.compare-products-table .specification:hover td:first-child {
+  background: #f6f1e7;
+}
+
+/* Empty state card */
+.compare-products-page .no-data {
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 10px 30px rgba(26, 26, 26, 0.06);
+  padding: 44px 24px;
+  text-align: center;
+  font-size: 16px;
+  color: var(--noor-text-muted);
+}
+
+/* ============================================================
+   My Account pages (info, addresses, password, downloads,
+   reward points, return requests, subscriptions, etc.)
+   ============================================================ */
+
+.account-page .page-title h1,
+.return-request-page .page-title h1 {
+  font-weight: 800;
+  color: var(--noor-text);
+}
+
+/* Form sections → cards */
+.account-page .fieldset,
+.return-request-page .fieldset {
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 8px 24px rgba(26, 26, 26, 0.05);
+  padding: 24px 26px;
+  margin: 0 0 24px;
+}
+
+.account-page .fieldset .title,
+.return-request-page .fieldset .title {
+  text-align: start;
+  padding: 0 0 14px;
+  margin: 0 0 18px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--noor-text);
+  border-bottom: 1px solid #f1ebdf;
+}
+
+/* Strip the legacy grey inner box — the card is the container now */
+.account-page .form-fields,
+.return-request-page .form-fields {
+  background: none;
+  border-top: none;
+  padding: 0;
+}
+
+/* Left-aligned, modern field rows */
+.account-page .inputs,
+.return-request-page .inputs {
+  text-align: start;
+}
+
+.account-page .inputs label,
+.return-request-page .inputs label {
+  text-align: start;
+  font-weight: 600;
+  color: var(--noor-text);
+}
+
+.account-page .inputs input[type="text"],
+.account-page .inputs input[type="email"],
+.account-page .inputs input[type="tel"],
+.account-page .inputs input[type="password"],
+.account-page .inputs select,
+.account-page .inputs textarea,
+.return-request-page .inputs input[type="text"],
+.return-request-page .inputs textarea,
+.return-request-page .inputs select {
+  width: 480px;
+  min-height: 44px;
+  border: 1px solid #e0d8cc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: var(--noor-font);
+  background: var(--noor-white);
+}
+
+/* Keep the inline date-of-birth selects compact */
+.account-page .inputs.date-of-birth select,
+.return-request-page .inputs.date-of-birth select {
+  width: 31%;
+  max-width: 126px;
+}
+
+.account-page .inputs input:focus,
+.account-page .inputs select:focus,
+.account-page .inputs textarea:focus,
+.return-request-page .inputs input:focus,
+.return-request-page .inputs textarea:focus {
+  outline: none;
+  border-color: var(--noor-gold);
+  box-shadow: 0 0 0 3px var(--noor-gold-light);
+}
+
+/* Primary buttons → gold pills, left aligned */
+.account-page .button-1,
+.return-request-page .button-1 {
+  border-radius: 10px;
+  background-color: var(--noor-gold);
+  color: var(--noor-black);
+  font-weight: 700;
+  text-transform: none;
+  box-shadow: 0 8px 20px rgba(229, 168, 68, 0.30);
+  transition: background-color .2s ease, transform .2s ease;
+}
+
+.account-page .button-1:hover,
+.account-page .button-1:focus,
+.return-request-page .button-1:hover,
+.return-request-page .button-1:focus {
+  background-color: var(--noor-gold-hover);
+  transform: translateY(-1px);
+}
+
+.account-page .buttons {
+  text-align: start;
+}
+
+/* Empty-state card across account pages */
+.account-page .no-data {
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 10px 30px rgba(26, 26, 26, 0.06);
+  padding: 44px 24px;
+  text-align: center;
+  font-size: 16px;
+  color: var(--noor-text-muted);
+}
+
+/* --- Address list: cards (mirrors order history) --- */
+.address-list-page .address-list {
+  display: grid;
+  gap: 18px;
+}
+
+.account-page .address-item {
+  margin: 0;
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 8px 24px rgba(26, 26, 26, 0.05);
+  padding: 22px 24px;
+}
+
+.account-page .address-item .title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--noor-text);
+  margin: 0 0 12px;
+}
+
+.address-list-page .info {
+  margin: 0 0 16px;
+  border-top: none;
+  background: none;
+  padding: 0;
+  color: var(--noor-text-muted);
+}
+
+.address-list-page .info .name {
+  color: var(--noor-text);
+}
+
+.account-page .add-button {
+  margin: 4px 0 20px;
+}
+
+/* --- Reward points balance banner --- */
+.account-page .reward-points-overview {
+  background: var(--noor-gold-light);
+  border: 1px solid #f0e2c4;
+  border-radius: var(--noor-radius);
+  padding: 22px 24px;
+  color: var(--noor-text);
+  font-weight: 600;
+}
+
+.account-page .reward-points-overview .current-balance {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--noor-text);
+}
+
+.account-page .reward-points-overview .min-balance {
+  margin-top: 6px;
+  color: var(--noor-text-muted);
+}
+
+/* --- Account data tables (downloads, reward points, external auth) --- */
+@media all and (min-width: 769px) {
+  .address-list-page .address-list {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .account-page .table-wrapper {
+    border: 1px solid #efe7d8;
+    border-radius: var(--noor-radius);
+    box-shadow: 0 8px 24px rgba(26, 26, 26, 0.05);
+    overflow: hidden;
+  }
+
+  .account-page .data-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .account-page .data-table thead th {
+    background-color: var(--noor-black);
+    color: var(--noor-white);
+    border: none;
+    padding: 15px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+  }
+
+  .account-page .data-table tbody td {
+    background-color: var(--noor-white);
+    border: none;
+    border-bottom: 1px solid #f1ebdf;
+    padding: 16px 14px;
+    vertical-align: middle;
+  }
+
+  .account-page .data-table tbody tr.even td {
+    background-color: #fdfbf7;
+  }
+
+  .account-page .data-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .account-page .data-table tbody tr:hover td {
+    background-color: #fdf8ee;
+  }
+
+  .account-page .data-table .product a,
+  .account-page .data-table .order a {
+    color: var(--noor-text);
+    font-weight: 700;
+  }
+
+  .account-page .data-table .product a:hover,
+  .account-page .data-table .order a:hover {
+    color: var(--noor-gold);
+  }
+
+  /* Keep account form fields readable, not full-bleed */
+  .account-page .fieldset {
+    max-width: 760px;
+  }
+}
+
+@media all and (max-width: 768px) {
+  .account-page .data-table tr {
+    border: 1px solid #efe7d8;
+    border-radius: var(--noor-radius);
+    box-shadow: 0 6px 18px rgba(26, 26, 26, 0.06);
+    overflow: hidden;
+  }
+
+  .account-page .inputs input[type="text"],
+  .account-page .inputs input[type="email"],
+  .account-page .inputs input[type="tel"],
+  .account-page .inputs input[type="password"],
+  .account-page .inputs select,
+  .account-page .inputs textarea {
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   Auth pages: login / register / password recovery /
+   account activation / email revalidation
+   ============================================================ */
+
+.login-page .page-title h1,
+.registration-page .page-title h1,
+.registration-result-page .page-title h1,
+.password-recovery-page .page-title h1,
+.account-activation-page .page-title h1,
+.email-revalidation-page .page-title h1 {
+  font-weight: 800;
+  color: var(--noor-text);
+}
+
+/* Form/section blocks → cards */
+.login-page .new-wrapper,
+.login-page .returning-wrapper,
+.registration-page .fieldset,
+.password-recovery-page .fieldset,
+.account-activation-page .fieldset,
+.email-revalidation-page .fieldset {
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 8px 24px rgba(26, 26, 26, 0.05);
+  padding: 26px;
+  margin: 0 0 24px;
+}
+
+/* Card headings */
+.login-page .title,
+.registration-page .fieldset .title,
+.password-recovery-page .fieldset .title {
+  text-align: start;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--noor-text);
+  margin: 0 0 16px;
+  padding: 0 0 14px;
+  border-bottom: 1px solid #f1ebdf;
+}
+
+/* Strip the legacy grey inner boxes */
+.login-page .new-wrapper .text,
+.login-page .returning-wrapper .form-fields,
+.registration-page .form-fields,
+.password-recovery-page .form-fields,
+.account-activation-page .form-fields,
+.email-revalidation-page .form-fields {
+  background: none;
+  border-top: none;
+  padding: 0;
+}
+
+.login-page .new-wrapper .text {
+  margin: 0 0 20px;
+  line-height: 1.6;
+  color: var(--noor-text-muted);
+}
+
+/* Left-aligned modern fields */
+.login-page .inputs,
+.registration-page .inputs,
+.password-recovery-page .inputs,
+.account-activation-page .inputs,
+.email-revalidation-page .inputs {
+  text-align: start;
+}
+
+.login-page .inputs label,
+.registration-page .inputs label,
+.password-recovery-page .inputs label,
+.account-activation-page .inputs label,
+.email-revalidation-page .inputs label {
+  display: block;
+  width: 100%;
+  margin: 0 0 8px;
+  text-align: start;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--noor-text);
+}
+
+/* Companion labels for checkboxes/radios must stay inline (don't stack) */
+.login-page .inputs.reversed label,
+.registration-page .inputs.accept-consent label,
+.registration-page .gender label,
+.registration-page .attributes label {
+  display: inline-block;
+  width: auto;
+  margin: 0;
+  vertical-align: middle;
+}
+
+.registration-page .inputs.accept-consent input[type="checkbox"],
+.registration-page .gender input[type="radio"] {
+  margin-inline-end: 8px;
+  vertical-align: middle;
+}
+
+.login-page .inputs input[type="text"],
+.login-page .inputs input[type="email"],
+.login-page .inputs input[type="password"],
+.registration-page .inputs input[type="text"],
+.registration-page .inputs input[type="email"],
+.registration-page .inputs input[type="tel"],
+.registration-page .inputs input[type="password"],
+.registration-page .inputs select,
+.registration-page .inputs textarea,
+.password-recovery-page .inputs input[type="text"],
+.password-recovery-page .inputs input[type="email"],
+.password-recovery-page .inputs input[type="password"] {
+  width: 100%;
+  max-width: 100%;
+  min-height: 46px;
+  border: 1px solid #e0d8cc;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: var(--noor-font);
+  font-size: 15px;
+  background: var(--noor-white);
+}
+
+.login-page .inputs input:focus,
+.registration-page .inputs input:focus,
+.registration-page .inputs select:focus,
+.registration-page .inputs textarea:focus,
+.password-recovery-page .inputs input:focus {
+  outline: none;
+  border-color: var(--noor-gold);
+  box-shadow: 0 0 0 3px var(--noor-gold-light);
+}
+
+/* Keep the inline date-of-birth selects compact */
+.registration-page .inputs.date-of-birth select {
+  width: 31%;
+  max-width: 126px;
+}
+
+/* Password field + show/hide eye */
+.login-page .login-password {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+.login-page .login-password input {
+  width: 100%;
+  padding-inline-end: 42px;
+}
+
+/* Remember-me / forgot-password row */
+.login-page .returning-wrapper .inputs.reversed {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.login-page .inputs.reversed .forgot-password {
+  margin-inline-start: auto;
+}
+
+.login-page .inputs.reversed .forgot-password a {
+  color: var(--noor-gold-hover);
+  font-weight: 600;
+}
+
+/* Primary buttons → gold pills */
+.login-page .button-1,
+.registration-page .button-1,
+.registration-result-page .button-1,
+.password-recovery-page .button-1,
+.account-activation-page .button-1,
+.email-revalidation-page .button-1 {
+  border-radius: 10px;
+  background-color: var(--noor-gold);
+  color: var(--noor-black);
+  font-weight: 700;
+  text-transform: none;
+  box-shadow: 0 8px 20px rgba(229, 168, 68, 0.30);
+  transition: background-color .2s ease, transform .2s ease;
+}
+
+.login-page .button-1:hover,
+.login-page .button-1:focus,
+.registration-page .button-1:hover,
+.registration-page .button-1:focus,
+.registration-result-page .button-1:hover,
+.registration-result-page .button-1:focus,
+.password-recovery-page .button-1:hover,
+.password-recovery-page .button-1:focus,
+.account-activation-page .button-1:hover,
+.account-activation-page .button-1:focus,
+.email-revalidation-page .button-1:hover,
+.email-revalidation-page .button-1:focus {
+  background-color: var(--noor-gold-hover);
+  transform: translateY(-1px);
+}
+
+/* The login form's button row inside the card */
+.login-page .returning-wrapper .buttons {
+  background: none;
+  padding: 4px 0 0;
+  text-align: start;
+}
+
+.registration-page .buttons,
+.password-recovery-page .buttons {
+  text-align: start;
+}
+
+/* Keep the login content centred and readable on wide screens */
+.login-page .page-body {
+  max-width: 1000px;
+  margin-inline: auto;
+}
+
+/* Desktop: login shows the two blocks side by side */
+@media all and (min-width: 769px) {
+  /* Give the returning-customer (login) form noticeably more room */
+  .login-page .customer-blocks {
+    display: grid;
+    grid-template-columns: 0.9fr 1.4fr;
+    gap: 32px;
+    align-items: stretch;
+  }
+
+  .login-page .new-wrapper,
+  .login-page .returning-wrapper {
+    margin: 0;
+    height: 100%;
+  }
+
+  .registration-page .fieldset,
+  .password-recovery-page .fieldset,
+  .account-activation-page .fieldset,
+  .email-revalidation-page .fieldset {
+    max-width: 620px;
+    margin-inline: auto;
+  }
+}
+
+@media all and (max-width: 768px) {
+  .login-page .inputs input[type="text"],
+  .login-page .inputs input[type="email"],
+  .login-page .inputs input[type="password"],
+  .login-page .login-password,
+  .registration-page .inputs input[type="text"],
+  .registration-page .inputs input[type="email"],
+  .registration-page .inputs input[type="tel"],
+  .registration-page .inputs input[type="password"],
+  .registration-page .inputs select,
+  .registration-page .inputs textarea,
+  .password-recovery-page .inputs input[type="text"],
+  .password-recovery-page .inputs input[type="email"],
+  .password-recovery-page .inputs input[type="password"] {
+    width: 100%;
+  }
+}
+
+/* Make the returning-customer (login) form larger / more prominent */
+.login-page .returning-wrapper {
+  padding: 34px 36px;
+  border-top: 3px solid var(--noor-gold);
+  box-shadow: 0 16px 40px rgba(26, 26, 26, 0.10);
+}
+
+/* New-customer info card: centre its content vertically so it balances
+   the taller login form instead of leaving an empty void */
+.login-page .new-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-page .returning-wrapper .title {
+  font-size: 20px;
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+}
+
+.login-page .returning-wrapper .inputs {
+  margin-bottom: 20px;
+}
+
+.login-page .returning-wrapper .inputs label {
+  font-size: 15px;
+}
+
+.login-page .returning-wrapper .inputs input[type="text"],
+.login-page .returning-wrapper .inputs input[type="email"],
+.login-page .returning-wrapper .inputs input[type="password"] {
+  min-height: 54px;
+  font-size: 16px;
+  padding: 12px 16px;
+}
+
+.login-page .returning-wrapper .login-button {
+  min-height: 54px;
+  font-size: 16px;
+  padding: 0 44px;
+}
+
+/* Date-of-birth: three selects in a tidy row under the stacked label */
+.registration-page .inputs.date-of-birth {
+  white-space: normal;
+}
+
+.registration-page .inputs.date-of-birth select {
+  display: inline-block;
+  width: 32%;
+  max-width: 160px;
+  margin-inline-end: 6px;
+}
+
+/* Show/hide password eye — logical positioning so it sits on the
+   correct side in both LTR and RTL (base styles.css uses physical right) */
+.login-page .password-eye {
+  right: auto;
+  inset-inline-end: 12px;
+  opacity: .65;
+  transition: opacity .2s ease;
+}
+
+.login-page .password-eye:hover {
+  opacity: 1;
+}
+
+/* Checkout-as-guest / new-customer call-to-action buttons */
+.login-page .new-wrapper .buttons {
+  background: none;
+  padding: 4px 0 0;
+  text-align: start;
+}
+
+.login-page .checkout-as-guest-or-register-block .buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Validation + error messaging on the auth cards */
+.login-page .message-error,
+.registration-page .message-error,
+.password-recovery-page .message-error,
+.login-page .field-validation-error,
+.registration-page .field-validation-error,
+.password-recovery-page .field-validation-error {
+  color: #b3261e;
+  font-weight: 600;
+}
+
+.login-page .message-error,
+.registration-page .message-error,
+.password-recovery-page .message-error {
+  background: #fdecea;
+  border: 1px solid #f5c2bd;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 0 0 16px;
+}
+
+/* Registration result / activation status text */
+.registration-result-page .result,
+.password-recovery-page .result,
+.account-activation-page .result,
+.email-revalidation-page .result {
+  color: var(--noor-text);
+  font-weight: 700;
+}
+
+/* ============================================================
+   External authentication (social login) block
+   ============================================================ */
+
+.external-authentication {
+  max-width: 540px;
+  margin: 28px auto 40px;
+  text-align: center;
+}
+
+/* "Or login using" rendered as a centred divider with rules on each side */
+.external-authentication .title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--noor-text-muted);
+  font-weight: 600;
+  font-size: 15px;
+  margin: 0 0 20px;
+}
+
+.external-authentication .title::before,
+.external-authentication .title::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: #efe7d8;
+}
+
+/* Centre the provider buttons (drop the stock grey top divider) */
+.external-authentication .buttons {
+  border-top: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.external-auth-errors {
+  color: #b3261e;
+  font-weight: 600;
+}
+
+.external-auth-association,
+.password-recovery-page .result {
+  color: var(--noor-text-muted);
+}
+
+.external-auth-association a,
+.add-more-external-records a {
+  color: var(--noor-gold-hover);
+  font-weight: 600;
+}
+
+.external-auth-association a:hover,
+.external-auth-association a:focus,
+.add-more-external-records a:hover,
+.add-more-external-records a:focus {
+  color: var(--noor-gold);
+}
+
+/* ============================================================
+   Premium login upgrade — bolder, larger, more luxurious
+   ============================================================ */
+
+/* Hero-sized welcome heading */
+.login-page .page-title {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.login-page .page-title h1 {
+  font-size: 38px;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.login-page .page-title h1::after {
+  content: "";
+  display: block;
+  width: 72px;
+  height: 4px;
+  margin: 16px auto 0;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--noor-gold), var(--noor-gold-hover));
+}
+
+/* Bigger, rounder cards */
+.login-page .new-wrapper,
+.login-page .returning-wrapper {
+  border-radius: var(--noor-radius-lg);
+  padding: 44px 42px;
+}
+
+/* Info card gets a soft gold-tinted treatment so it reads as secondary */
+.login-page .new-wrapper {
+  background: linear-gradient(165deg, #fffdf8 0%, var(--noor-gold-light) 100%);
+  border-color: #ecdcb4;
+}
+
+.login-page .new-wrapper .title {
+  font-size: 22px;
+}
+
+.login-page .new-wrapper .text {
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: var(--noor-text);
+  margin-bottom: 28px;
+}
+
+.login-page .new-wrapper .register-button {
+  width: 100%;
+  min-height: 52px;
+  font-size: 16px;
+  background-color: transparent;
+  border: 2px solid var(--noor-gold);
+  color: var(--noor-gold-hover);
+  box-shadow: none;
+}
+
+.login-page .new-wrapper .register-button:hover,
+.login-page .new-wrapper .register-button:focus {
+  background-color: var(--noor-gold);
+  color: var(--noor-black);
+}
+
+/* The returning-customer form: the unmistakable focal point */
+.login-page .returning-wrapper {
+  border-top: 4px solid var(--noor-gold);
+  box-shadow: 0 24px 60px rgba(26, 26, 26, 0.14);
+}
+
+.login-page .returning-wrapper .title {
+  font-size: 24px;
+  margin-bottom: 26px;
+  padding-bottom: 18px;
+}
+
+.login-page .returning-wrapper .inputs label {
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.login-page .returning-wrapper .inputs input[type="text"],
+.login-page .returning-wrapper .inputs input[type="email"],
+.login-page .returning-wrapper .inputs input[type="password"] {
+  min-height: 58px;
+  font-size: 16px;
+  border-radius: 12px;
+  border-color: #e3dac9;
+  padding: 14px 18px;
+}
+
+/* Full-width gradient sign-in button */
+.login-page .returning-wrapper .buttons {
+  width: 100%;
+}
+
+.login-page .returning-wrapper .login-button {
+  width: 100%;
+  min-height: 58px;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--noor-gold) 0%, var(--noor-gold-hover) 100%);
+  box-shadow: 0 12px 26px rgba(229, 168, 68, 0.38);
+}
+
+.login-page .returning-wrapper .login-button:hover,
+.login-page .returning-wrapper .login-button:focus {
+  background: linear-gradient(135deg, var(--noor-gold-hover) 0%, var(--noor-gold) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(229, 168, 68, 0.45);
+}
+
+/* A touch more breathing room between the two panels on desktop */
+@media all and (min-width: 769px) {
+  .login-page .customer-blocks {
+    grid-template-columns: 0.85fr 1.45fr;
+    gap: 40px;
+  }
+}
+
+/* ============================================================
+   Wishlist page
+   ============================================================ */
+
+.wishlist-page .page-title h1 {
+  font-weight: 800;
+  color: var(--noor-text);
+}
+
+/* Custom wishlist switcher buttons */
+.wishlist-page .button-row .custom-wishlist-button {
+  border-radius: 10px;
+  text-transform: none;
+  font-weight: 600;
+}
+
+/* Reuse the modern cart-table look (table.cart lives in .wishlist-content) */
+.wishlist-content .cart .product a.product-name {
+  font-weight: 700;
+  color: var(--noor-text);
+}
+
+.wishlist-content .cart .product a.product-name:hover,
+.wishlist-content .cart .product a.product-name:focus {
+  color: var(--noor-gold);
+  text-decoration: none;
+}
+
+.wishlist-content .cart td.product-picture img {
+  border-radius: 10px;
+  border: 1px solid #efe7d8;
+  background: #faf7f1;
+}
+
+.wishlist-content .cart .product-unit-price {
+  font-weight: 700;
+  color: var(--noor-text);
+}
+
+.wishlist-content .cart .product-subtotal {
+  font-weight: 700;
+  color: var(--noor-gold);
+}
+
+.wishlist-content .cart .qty-input,
+.wishlist-content .cart td.quantity input,
+.wishlist-content .cart .qty-dropdown {
+  height: 40px;
+  border: 1px solid #e0d8cc;
+  border-radius: 8px;
+  background: var(--noor-white);
+  font-family: var(--noor-font);
+  font-weight: 600;
+  color: var(--noor-text);
+}
+
+.wishlist-content .cart .remove-from-cart .remove-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #faf2e2;
+  background-position: center;
+  background-size: 11px;
+  transition: background-color .2s ease, transform .2s ease;
+}
+
+.wishlist-content .cart .remove-from-cart .remove-btn:hover {
+  background-color: var(--noor-gold-light);
+  transform: scale(1.08);
+}
+
+/* Action buttons */
+.wishlist-content .buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.wishlist-content .buttons .button-2 {
+  border-radius: 10px;
+  text-transform: none;
+  font-weight: 600;
+}
+
+.wishlist-content .wishlist-add-to-cart-button {
+  background-color: var(--noor-gold);
+  color: var(--noor-black);
+  border: none;
+}
+
+.wishlist-content .wishlist-add-to-cart-button:hover,
+.wishlist-content .wishlist-add-to-cart-button:focus {
+  background-color: var(--noor-gold-hover);
+}
+
+/* Shareable wishlist URL */
+.wishlist-page .share-info {
+  margin-top: 18px;
+  color: var(--noor-text-muted);
+}
+
+.wishlist-page .share-info .share-link {
+  color: var(--noor-gold-hover);
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.wishlist-page .no-data {
+  background: var(--noor-white);
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  box-shadow: 0 10px 30px rgba(26, 26, 26, 0.06);
+  padding: 44px 24px;
+  text-align: center;
+  font-size: 16px;
+  color: var(--noor-text-muted);
+}
+
+@media all and (min-width: 769px) {
+  .wishlist-content .table-wrapper {
+    border: 1px solid #efe7d8;
+    border-radius: var(--noor-radius);
+    box-shadow: 0 10px 30px rgba(26, 26, 26, 0.06);
+    overflow: hidden;
+  }
+
+  .wishlist-content .cart {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .wishlist-content .cart thead th {
+    background-color: var(--noor-black);
+    color: var(--noor-white);
+    border: none;
+    padding: 16px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+  }
+
+  .wishlist-content .cart tbody td {
+    background-color: var(--noor-white);
+    border: none;
+    border-bottom: 1px solid #f1ebdf;
+    padding: 18px 14px;
+    vertical-align: middle;
+  }
+
+  .wishlist-content .cart tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .wishlist-content .cart tbody tr:hover td {
+    background-color: #fdf8ee;
+  }
+}
+
+@media all and (max-width: 768px) {
+  .wishlist-content .cart tr {
+    border: 1px solid #efe7d8;
+    border-radius: var(--noor-radius);
+    box-shadow: 0 6px 18px rgba(26, 26, 26, 0.06);
+    overflow: hidden;
+  }
+}
+
+/* ============================================================
+   Product details page
+   ============================================================ */
+
+.product-details-page .product-essential {
+  border-bottom: 1px solid #efe7d8;
+}
+
+/* Gallery image framing */
+.product-details-page .gallery .picture {
+  border: 1px solid #efe7d8;
+  border-radius: var(--noor-radius);
+  background: #faf7f1;
+}
+
+.product-details-page .picture-gallery .picture-thumbs .thumb-item {
+  border: 1px solid #efe7d8;
+  border-radius: 8px;
+}
+
+/* Title + short description */
+.product-details-page .overview .product-name {
+  border-bottom: 1px solid #efe7d8;
+}
+
+.product-details-page .overview .product-name h1 {
+  font-weight: 800;
+  color: var(--noor-text);
+}
+
+.product-details-page .overview .short-description {
+  color: var(--noor-text-muted);
+  line-height: 1.7;
+}
+
+/* Price block */
+.product-details-page .overview .product-price {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--noor-gold);
+}
+
+.product-details-page .overview .old-product-price,
+.product-details-page .overview .non-discounted-price {
+  color: var(--noor-text-muted);
+}
+
+/* Quantity + add to cart */
+.product-details-page .overview .add-to-cart-panel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-details-page .overview .qty-input,
+.product-details-page .overview .qty-dropdown {
+  border: 1px solid #e0d8cc;
+  border-radius: 8px;
+  background: var(--noor-white);
+  color: var(--noor-text);
+  font-weight: 600;
+}
+
+.product-details-page .overview .add-to-cart-button {
+  height: 48px;
+  border-radius: 10px;
+  background-color: var(--noor-gold);
+  color: var(--noor-black);
+  font-weight: 800;
+  text-transform: none;
+  padding: 0 32px;
+  box-shadow: 0 8px 20px rgba(229, 168, 68, 0.30);
+  transition: background-color .2s ease, transform .2s ease;
+}
+
+.product-details-page .overview .add-to-cart-button:hover,
+.product-details-page .overview .add-to-cart-button:focus {
+  background-color: var(--noor-gold-hover);
+  transform: translateY(-1px);
+}
+
+/* Wishlist / compare / email buttons → outlined pills (icons kept) */
+.product-details-page .overview .button-2 {
+  background-color: var(--noor-white);
+  border: 1px solid #e0d8cc;
+  border-radius: 10px;
+  color: var(--noor-text);
+  font-weight: 600;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+
+.product-details-page .overview .button-2:hover,
+.product-details-page .overview .button-2:focus {
+  border-color: var(--noor-gold);
+  background-color: var(--noor-gold-light);
+}
+
+/* Collateral: specifications + tags */
+.product-details-page .product-collateral .title,
+.product-details-page .full-description {
+  color: var(--noor-text);
+}
+
+.product-details-page .product-collateral .title {
+  font-weight: 800;
+}
+
+.product-details-page .product-specs-box td,
+.product-details-page .product-filter-level-values-box td {
+  border-color: #f1ebdf;
+}
+
+.product-details-page .product-specs-box td.spec-group-name {
+  background: var(--noor-gold-light);
+  color: var(--noor-text);
+  font-weight: 800;
+}
+
+/* Tier prices */
+.product-details-page .tier-prices table td {
+  border-color: #f1ebdf;
+}
+
+.product-details-page .tier-prices .item-price {
+  background-color: var(--noor-gold-light);
+  color: var(--noor-gold-hover);
+  font-weight: 700;
 }

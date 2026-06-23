@@ -20,7 +20,10 @@
       "Bash(git push *)",
       "Bash(cat theme.json)",
       "Bash(find Views -name \"_Noor*.cshtml\")",
-      "Bash(cat ../../../../../global.json)"
+      "Bash(cat ../../../../../global.json)",
+      "Bash(awk 'NR>=1712' noor-lighting.css)",
+      "PowerShell(Get-PSDrive -PSProvider FileSystem | Select-Object Name, @{N='UsedGB';E={[math]::Round\\($_.Used/1GB,1\\)}}, @{N='FreeGB';E={[math]::Round\\($_.Free/1GB,2\\)}} | Format-Table -AutoSize)",
+      "PowerShell(Select-String *)"
     ]
   }
 }

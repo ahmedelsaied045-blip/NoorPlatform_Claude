@@ -4316,7 +4316,7 @@ label, label + * {
 .avatar-page .page-body {
   margin: 0 0 30px;
   overflow: hidden;
-  background-color: #f9f9f9;
+  background-color: #faf5ec;
   padding: 30px 25px;
 }
 
@@ -8860,7 +8860,7 @@ label, label + * {
 
   .login-page .new-wrapper {
     float: left;
-    width: 49%;
+    width: 100%;
     margin: 0;
   }
 
@@ -8870,7 +8870,7 @@ label, label + * {
 
   .login-page .returning-wrapper {
     float: right;
-    width: 49%;
+    width: 100%;
   }
 
   .login-page .returning-wrapper .form-fields {
