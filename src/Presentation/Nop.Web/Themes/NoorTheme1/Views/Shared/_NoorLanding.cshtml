@@ -1,7 +1,28 @@
 @using Nop.Web.Framework.Mvc.Routing
+@using Nop.Core
+@using Nop.Core.Domain.Customers
+@using Nop.Services.Catalog
+@using Nop.Services.Customers
+@inject IStoreContext storeContext
+@inject IProductService productService
+@inject ICustomerService customerService
+@inject ICategoryService categoryService
 @{
     // Arabic visitors get RTL/Arabic copy; everyone else gets English.
     var ar = await Html.ShouldUseRtlThemeAsync();
+
+    // live catalog/customer counts for the stats section
+    var currentStore = await storeContext.GetCurrentStoreAsync();
+    var productCount = (await productService.SearchProductsAsync(storeId: currentStore.Id,
+        visibleIndividuallyOnly: true, pageSize: 1)).TotalCount;
+
+    var registeredRole = await customerService.GetCustomerRoleBySystemNameAsync(NopCustomerDefaults.RegisteredRoleName);
+    var customerCount = registeredRole == null
+        ? 0
+        : (await customerService.GetAllCustomersAsync(customerRoleIds: new[] { registeredRole.Id },
+            pageSize: 1, getOnlyTotalCount: true)).TotalCount;
+
+    var categoryCount = (await categoryService.GetAllCategoriesAsync(currentStore.Id)).Count;
 }
 
 @* ===================== FEATURES ===================== *@
@@ -47,19 +68,19 @@
 <section class="noor-section noor-stats">
     <div class="noor-stats__grid">
         <div class="noor-stat">
-            <span class="noor-stat__num" data-count="50">+50</span>
-            <span class="noor-stat__label">@(ar ? "منتج مميز" : "Featured products")</span>
+            <span class="noor-stat__num" data-count="@productCount" data-prefix="">@productCount</span>
+            <span class="noor-stat__label">@(ar ? "منتج" : "Products")</span>
         </div>
         <div class="noor-stat">
-            <span class="noor-stat__num" data-count="100">+100</span>
+            <span class="noor-stat__num" data-count="@customerCount" data-prefix="">@customerCount</span>
             <span class="noor-stat__label">@(ar ? "عميل سعيد" : "Happy customers")</span>
         </div>
         <div class="noor-stat">
-            <span class="noor-stat__num" data-count="15">+15</span>
+            <span class="noor-stat__num" data-count="@categoryCount" data-prefix="">@categoryCount</span>
             <span class="noor-stat__label">@(ar ? "تصنيف" : "Categories")</span>
         </div>
         <div class="noor-stat">
-            <span class="noor-stat__num" data-count="5">+5</span>
+            <span class="noor-stat__num" data-count="15">+15</span>
             <span class="noor-stat__label">@(ar ? "سنوات خبرة" : "Years of experience")</span>
         </div>
     </div>
@@ -125,10 +146,12 @@
                 if (!e.isIntersecting) return;
                 io.unobserve(e.target);
                 var el = e.target, target = parseInt(el.getAttribute('data-count'), 10) || 0, start = null;
+                var prefix = el.getAttribute('data-prefix');
+                if (prefix === null) prefix = '+';
                 function tick(t) {
                     if (!start) start = t;
                     var p = Math.min((t - start) / 1200, 1);
-                    el.textContent = '+' + Math.floor(p * target);
+                    el.textContent = prefix + Math.floor(p * target);
                     if (p < 1) requestAnimationFrame(tick);
                 }
                 requestAnimationFrame(tick);

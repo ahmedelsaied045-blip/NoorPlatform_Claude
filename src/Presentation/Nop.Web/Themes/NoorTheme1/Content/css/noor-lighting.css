@@ -27,7 +27,12 @@
 /* ---- Global ---- */
 
 body {
-  background-color: var(--noor-bg);
+  /* same warm gradient the home page uses, applied to the master page background */
+  background:
+    radial-gradient(55rem 28rem at 100% -4%, rgba(229, 168, 68, 0.13), transparent 60%),
+    radial-gradient(48rem 26rem at -6% 10%, rgba(245, 237, 218, 0.55), transparent 55%),
+    var(--noor-bg);
+  background-attachment: fixed;
   font-family: var(--noor-font);
   color: var(--noor-text-muted);
 }
@@ -465,6 +470,106 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--noor-radius);
 }
 
+/* New products & offers slider — only the product image floats on the banner */
+.noor-hero__showcase {
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+}
+
+.noor-hero-slider {
+  width: 100%;
+  position: relative;
+  padding: 0 0 30px; /* bottom room for the pagination dots */
+  box-sizing: border-box;
+}
+
+.noor-hero-slider .swiper-slide {
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.noor-hero-product {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-decoration: none;
+}
+
+.noor-hero-product__media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* the product image is the only visual — no card, the gold banner shows through */
+.noor-hero-product__img {
+  max-width: 100%;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 26px rgba(0, 0, 0, .32));
+  transition: transform 0.25s ease;
+}
+
+.noor-hero-product:hover .noor-hero-product__img {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.noor-hero-product__tags {
+  position: absolute;
+  inset-block-start: 4px;
+  inset-inline-start: 4px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.noor-hero-product__tag {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 50px;
+  line-height: 1;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, .2);
+}
+
+.noor-hero-product__tag--offer {
+  background: #C0392B;
+  color: var(--noor-white);
+}
+
+.noor-hero-product__tag--new {
+  background: var(--noor-black);
+  color: var(--noor-gold);
+}
+
+/* pagination dots */
+.noor-hero-slider .swiper-pagination {
+  bottom: 0;
+}
+
+.noor-hero-slider .swiper-pagination-bullet {
+  background: var(--noor-black);
+  opacity: 0.35;
+}
+
+.noor-hero-slider .swiper-pagination-bullet-active {
+  background: var(--noor-black);
+  opacity: 1;
+  width: 20px;
+  border-radius: 5px;
+}
+
 .noor-hero__content {
   flex: 1;
   text-align: center;
@@ -645,6 +750,20 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 560px;
     align-self: center;
   }
+
+  .noor-hero__showcase {
+    flex: 0 0 42%;
+    max-width: 42%;
+    align-self: center;
+  }
+
+  .noor-hero__content {
+    flex: 1 1 58%;
+  }
+
+  .noor-hero-product__img {
+    max-height: 240px;
+  }
 }
 
 @media all and (min-width: 1001px) {
@@ -795,15 +914,6 @@ html[dir="rtl"] .search-box form,
   width: 100%;
   max-width: none;
   margin: 0;
-}
-
-/* Soft, warm modern background */
-.html-home-page {
-  background:
-    radial-gradient(55rem 28rem at 100% -4%, rgba(229, 168, 68, 0.13), transparent 60%),
-    radial-gradient(48rem 26rem at -6% 10%, rgba(245, 237, 218, 0.55), transparent 55%),
-    var(--noor-bg);
-  background-attachment: fixed;
 }
 
 /* Consistent edge padding + vertical rhythm for all sections */

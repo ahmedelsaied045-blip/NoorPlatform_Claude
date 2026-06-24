@@ -22,10 +22,12 @@
     // Arabic font
     NopHtml.AppendCssFileParts("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap", excludeFromBundle: true);
     
-    //add swiper css file
-    if (catalogSettings.DisplayAllPicturesOnCatalogPages)
+    //Swiper powers the hero products slider, so it must always be available on themed pages.
+    //(by default nopCommerce only loads it when DisplayAllPicturesOnCatalogPages is enabled)
+    NopHtml.AppendCssFileParts("~/lib_npm/swiper/swiper-bundle.min.css");
+    if (!catalogSettings.DisplayAllPicturesOnCatalogPages)
     {
-        NopHtml.AppendCssFileParts("~/lib_npm/swiper/swiper-bundle.min.css");
+        NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/lib_npm/swiper/swiper-bundle.min.js");
     }
 
     //add jQuery UI css file

@@ -1,0 +1,66 @@
+@model IList<ProductOverviewModel>
+
+@using Nop.Core.Domain.Catalog
+
+@if (Model == null || !Model.Any())
+{
+    return;
+}
+
+@{
+    var sliderId = "noor-hero-swiper";
+    var rtl = await Html.ShouldUseRtlThemeAsync();
+}
+
+<div class="noor-hero-slider swiper" id="@sliderId" dir="@Html.GetUIDirection(!rtl)">
+    <div class="swiper-wrapper">
+        @foreach (var product in Model)
+        {
+            var productUrl = await NopUrl.RouteGenericUrlAsync<Product>(new { SeName = product.SeName });
+            var picture = product.PictureModels.FirstOrDefault();
+
+            //offer badge: only when there is a real old price higher than the current price
+            int? discountPercent = null;
+            if (product.ProductPrice.OldPriceValue.HasValue && product.ProductPrice.PriceValue.HasValue
+                && product.ProductPrice.OldPriceValue.Value > 0
+                && product.ProductPrice.OldPriceValue.Value > product.ProductPrice.PriceValue.Value)
+            {
+                discountPercent = (int)System.Math.Round((1 - (product.ProductPrice.PriceValue.Value / product.ProductPrice.OldPriceValue.Value)) * 100);
+            }
+
+            <div class="swiper-slide">
+                <a class="noor-hero-product" href="@productUrl" title="@product.Name">
+                    <div class="noor-hero-product__media">
+                        <div class="noor-hero-product__tags">
+                            @if (discountPercent.HasValue && discountPercent.Value > 0)
+                            {
+                                <span class="noor-hero-product__tag noor-hero-product__tag--offer">خصم @discountPercent.Value%</span>
+                            }
+                            @if (product.MarkAsNew)
+                            {
+                                <span class="noor-hero-product__tag noor-hero-product__tag--new">جديد</span>
+                            }
+                        </div>
+                        <img class="noor-hero-product__img" src="@picture?.ImageUrl" alt="@(picture?.AlternateText ?? product.Name)" loading="lazy" />
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+
+    <div class="swiper-pagination"></div>
+</div>
+
+<script asp-location="Footer">
+    document.addEventListener('DOMContentLoaded', function () {
+        if (typeof Swiper === 'undefined') return;
+        new Swiper('#@sliderId', {
+            slidesPerView: 1,
+            spaceBetween: 16,
+            loop: @(Model.Count > 1 ? "true" : "false"),
+            grabCursor: true,
+            autoplay: { delay: 5000, disableOnInteraction: false },
+            pagination: { el: '#@sliderId .swiper-pagination', clickable: true }
+        });
+    });
+</script>

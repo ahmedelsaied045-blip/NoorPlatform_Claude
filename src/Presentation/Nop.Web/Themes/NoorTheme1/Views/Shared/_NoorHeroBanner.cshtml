@@ -1,16 +1,16 @@
 <section class="noor-hero" aria-label="Hero banner">
     <div class="noor-hero__inner">
-        <div class="noor-hero__visual noor-hero__slider">
-            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageTop })
+        <div class="noor-hero__visual noor-hero__showcase">
+            @await Component.InvokeAsync(typeof(NoorHeroProductsViewComponent), new { maxItems = 8 })
         </div>
         <div class="noor-hero__content">
-            <span class="noor-hero__badge">تشكيلة جديدة ٢٠٢٦</span>
+            <span class="noor-hero__badge">جديد وعروض حصرية</span>
             <h1 class="noor-hero__title">أضئ مساحتك بلمسة من نور</h1>
             <p class="noor-hero__subtitle">
-                اكتشف تشكيلتنا من الإضاءة العصرية التي تجمع بين الأناقة والدفء — نجف، أباجورات، وإضاءة LED بأفضل الأسعار.
+                أحدث تشكيلات الإضاءة وأقوى العروض في مكان واحد — اكتشف الجديد ووفّر أكثر.
             </p>
             <div class="noor-hero__actions">
-                <a href="@Url.RouteUrl(NopRouteNames.General.SEARCH)" class="noor-btn noor-btn--dark">تسوق الآن</a>
+                <a href="@Url.RouteUrl(NopRouteNames.General.SEARCH)" class="noor-btn noor-btn--dark">تسوّق الآن</a>
                 <a href="#noor-collections" class="noor-btn noor-btn--light">اكتشف المجموعة</a>
             </div>
         </div>
