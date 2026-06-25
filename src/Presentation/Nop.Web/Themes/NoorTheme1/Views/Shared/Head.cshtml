@@ -33,3 +33,15 @@
     //add jQuery UI css file
     NopHtml.AppendCssFileParts("~/lib_npm/jquery-ui-dist/jquery-ui.min.css");
 }
+@* PWA: make the site installable and app-like on mobile (manifest + icons + meta).
+   This partial is rendered inside <head>, so the tags are emitted directly here.
+   viewport-fit=cover (declared after the default viewport) lets the bottom tab bar
+   respect notch / safe-area insets. *@
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<link rel="manifest" href="/noor-app.webmanifest" />
+<meta name="theme-color" content="#1A1A1A" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="نور" />
+<link rel="apple-touch-icon" href="/icons/bulb-192.png" />

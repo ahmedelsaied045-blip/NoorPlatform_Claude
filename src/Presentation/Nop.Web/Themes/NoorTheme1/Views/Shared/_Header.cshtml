@@ -29,3 +29,46 @@
     </div>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderAfter })
 </header>
+
+@* App-like bottom navigation — shown only on phones (see .noor-tabbar in noor-lighting.css) *@
+<nav class="noor-tabbar" aria-label="التنقل السريع">
+    <a class="noor-tabbar__item" href="@Url.RouteUrl(NopRouteNames.General.HOMEPAGE)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/><path d="M9 21v-6h6v6"/></svg>
+        <span>الرئيسية</span>
+    </a>
+    <a class="noor-tabbar__item" href="@Url.RouteUrl(NopRouteNames.General.SEARCH)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>المتجر</span>
+    </a>
+    <a class="noor-tabbar__item" href="@Url.RouteUrl(NopRouteNames.General.CART)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.4 12.4a1.5 1.5 0 0 0 1.5 1.2h8.3a1.5 1.5 0 0 0 1.5-1.2L23 7H6"/></svg>
+        <span>السلة</span>
+    </a>
+    <a class="noor-tabbar__item" href="@Url.RouteUrl(NopRouteNames.General.CUSTOMER_INFO)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+        <span>حسابي</span>
+    </a>
+</nav>
+
+<script asp-location="Footer">
+    (function () {
+        // highlight the active bottom-nav tab
+        try {
+            var path = (location.pathname.replace(/\/+$/, '') || '/');
+            document.querySelectorAll('.noor-tabbar__item').forEach(function (a) {
+                var href = ((a.getAttribute('href') || '').replace(/\/+$/, '') || '/');
+                var isHome = href === '/';
+                if ((isHome && path === '/') || (!isHome && (path === href || path.indexOf(href + '/') === 0))) {
+                    a.classList.add('is-active');
+                }
+            });
+        } catch (e) { }
+
+        // register the PWA service worker (makes the site installable)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/noor-sw.js').catch(function () { });
+            });
+        }
+    })();
+</script>

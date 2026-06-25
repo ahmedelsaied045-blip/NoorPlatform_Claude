@@ -4035,3 +4035,180 @@ html[dir="rtl"] .search-box form,
   color: var(--noor-gold-hover);
   font-weight: 700;
 }
+
+/* ==========================================================================
+   Mobile app experience — bottom tab bar + PWA / standalone polish
+   ========================================================================== */
+
+/* Hidden on desktop; the app-style bottom nav only appears on phones */
+.noor-tabbar {
+  display: none;
+}
+
+@media all and (max-width: 768px) {
+  .noor-tabbar {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    background: var(--noor-white);
+    border-top: 1px solid #ece2cc;
+    box-shadow: 0 -6px 20px rgba(0, 0, 0, .08);
+    /* respect the home-indicator / notch safe area */
+    padding-block: 6px;
+    padding-block-end: calc(6px + env(safe-area-inset-bottom, 0px));
+    padding-inline: 4px;
+  }
+
+  .noor-tabbar__item {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 4px 0;
+    min-height: 48px; /* comfortable touch target */
+    text-decoration: none;
+    color: var(--noor-text-muted);
+    font-family: var(--noor-font);
+    font-size: 11px;
+    font-weight: 600;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .noor-tabbar__item svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .noor-tabbar__item.is-active {
+    color: var(--noor-gold-hover);
+  }
+
+  .noor-tabbar__item:active {
+    transform: scale(0.94);
+  }
+
+  /* keep page content clear of the fixed bar */
+  body {
+    padding-block-end: calc(60px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* the footer shouldn't collide with the tab bar */
+  .footer {
+    margin-block-end: 8px;
+  }
+}
+
+/* When launched from the home screen (installed PWA), feel more native:
+   pad the header below the status bar / notch and hide the promo strip. */
+@media all and (display-mode: standalone) {
+  .header-announcement {
+    display: none;
+  }
+
+  .header {
+    padding-block-start: env(safe-area-inset-top, 0px);
+  }
+}
+
+/* ==========================================================================
+   Mobile menu (when expanded) — clean, readable, on-brand
+   Fixes white-on-white text and tidies the layout on phones.
+   ========================================================================== */
+@media all and (max-width: 768px) {
+  .menu-container {
+    padding: 0;
+    border-bottom: none;
+    box-shadow: none;
+  }
+
+  .header-menu {
+    background-color: transparent;
+  }
+
+  /* hamburger toggle button — solid black brand chip with a CSS-drawn icon */
+  .menu__toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    background-color: var(--noor-black);
+    background-image: none;
+    color: var(--noor-white);
+    text-transform: none;
+    font-family: var(--noor-font);
+    font-weight: 700;
+    font-size: 15px;
+    padding: 15px 20px;
+  }
+
+  .menu__toggle::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 20px;
+    height: 2px;
+    background: currentColor;
+    box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor;
+  }
+
+  /* the expanding panel */
+  .menu {
+    background-color: var(--noor-white);
+    overflow: hidden;
+    border-radius: 0 0 var(--noor-radius) var(--noor-radius);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .12);
+  }
+
+  .menu > .menu__item,
+  .menu__item {
+    background-color: var(--noor-white);
+    margin: 0;
+    border-bottom: 1px solid #efe7d6;
+  }
+
+  /* readable dark text on the light panel (overrides the white desktop-bar colour) */
+  .header-menu .menu__link,
+  .header-menu .menu__item-toggle,
+  .header-menu .menu > .menu__item > .menu__link,
+  .header-menu .menu > .menu__item.menu-dropdown > .menu__item-toggle,
+  .header-menu .menu > .menu__item.menu-dropdown > .menu__item-toggle > .menu__link {
+    color: var(--noor-text);
+    font-family: var(--noor-font);
+    font-weight: 600;
+    padding: 15px 20px;
+  }
+
+  /* tap / active state in brand gold */
+  .header-menu .menu__link:hover,
+  .header-menu .menu__item-toggle:hover,
+  .header-menu .menu > .menu__item.menu-dropdown:hover > .menu__item-toggle,
+  .header-menu .menu > .menu__item.menu-dropdown:hover > .menu__item-toggle > .menu__link,
+  .header-menu .menu__item.active > .menu__link {
+    color: var(--noor-gold-hover);
+  }
+
+  /* submenu — soft cream, indented so hierarchy is obvious */
+  .menu__list-view,
+  .menu__grid-view {
+    background-color: var(--noor-cream);
+    border-top: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .header-menu .menu__list-view .menu__link {
+    color: var(--noor-text-muted);
+    font-weight: 500;
+    padding-inline-start: 36px;
+  }
+
+  .header-menu .menu__list-view .menu__link:hover {
+    color: var(--noor-gold-hover);
+    background-color: var(--noor-gold-light);
+  }
+}
