@@ -86,7 +86,25 @@
     </div>
 </section>
 
- 
+@* ===================== VISUALIZE PROMO ===================== *@
+<section class="noor-section noor-visualize-promo">
+    <div class="noor-vzpromo">
+        <div class="noor-vzpromo__text">
+            <span class="noor-eyebrow">@(ar ? "جديد" : "New")</span>
+            <h2 class="noor-vzpromo__title">@(ar ? "تصوّر قبل الشراء" : "Visualize before you buy")</h2>
+            <p class="noor-vzpromo__sub">@(ar
+                ? "ارفع صورة غرفتك، ضَع منتجات الإضاءة عليها، وشاهد كيف ستبدو قبل أن تشتري — اسحب، كبّر، دوّر، وأضِف الكل للسلة."
+                : "Upload a photo of your room, place lighting products on it, and see how they look before you buy — drag, resize, rotate and add all to cart.")</p>
+            <a class="noor-vzpromo__btn" href="@Url.RouteUrl(NopRouteNames.General.VISUALIZE)">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L7 20"/></svg>
+                @(ar ? "جرّبها الآن" : "Try it now")
+            </a>
+        </div>
+        <div class="noor-vzpromo__art" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="2.5"/><path d="m21 16-5-5L5 21"/></svg>
+        </div>
+    </div>
+</section>
 
 @* ===================== CONTACT ===================== *@
 <section id="noor-contact" class="noor-section noor-contact">

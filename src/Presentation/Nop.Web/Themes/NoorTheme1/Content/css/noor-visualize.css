@@ -1,0 +1,684 @@
+/* ============================================================================
+   Noor — "Visualize Before You Buy" room visualizer styles
+   RTL-first, logical properties, reuses NoorTheme1 design tokens.
+   ========================================================================== */
+
+.vz-app {
+    --vz-bar: #ffffff;
+    --vz-line: #ece2cc;
+    --vz-ink: var(--noor-text, #1a1a1a);
+    --vz-muted: var(--noor-text-muted, #555);
+    --vz-gold: var(--noor-gold, #e5a844);
+    --vz-gold-d: var(--noor-gold-hover, #d4983a);
+    --vz-shadow: 0 10px 30px rgba(0, 0, 0, .10);
+    font-family: var(--noor-font);
+    color: var(--vz-ink);
+    /* break out of the centred content column for an immersive editor */
+    width: 100%;
+    margin-block: 6px 40px;
+}
+
+.vz-app *,
+.vz-app *::before,
+.vz-app *::after { box-sizing: border-box; }
+
+/* The theme's content wrappers use `position:relative; z-index:0`, which traps
+   our fixed mobile bottom-sheets BELOW the header menu (z-index:1). Neutralise
+   that stacking context on the visualizer page only (scoped via :has). */
+.master-column-wrapper:has(.vz-app),
+.master-wrapper-content:has(.vz-app) { z-index: auto; }
+
+/* ---------- hero ---------- */
+.vz-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 22px 24px;
+    margin-block-end: 14px;
+    border-radius: var(--noor-radius-lg, 24px);
+    background:
+        radial-gradient(1200px 240px at 100% 0, rgba(229, 168, 68, .18), transparent 60%),
+        linear-gradient(135deg, #211c12, #14110b);
+    color: #fff;
+    box-shadow: var(--vz-shadow);
+}
+
+.vz-hero__title {
+    margin: 0 0 6px;
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.vz-hero__sub {
+    margin: 0;
+    font-size: 15px;
+    color: #e9ddc7;
+    max-width: 60ch;
+}
+
+.vz-hero__cta { flex: 0 0 auto; }
+
+/* ---------- buttons ---------- */
+.vz-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 11px 18px;
+    border-radius: 12px;
+    background: #f1ead9;
+    color: var(--vz-ink);
+    transition: transform .12s, background .15s, box-shadow .15s, opacity .15s;
+}
+
+.vz-btn:hover { background: #e9dfc6; }
+.vz-btn:active { transform: scale(.97); }
+.vz-btn:disabled { opacity: .45; cursor: not-allowed; }
+
+.vz-btn--primary { background: var(--vz-gold); color: #1a1a1a; box-shadow: 0 8px 18px rgba(229, 168, 68, .35); }
+.vz-btn--primary:hover { background: var(--vz-gold-d); }
+.vz-btn--ghost { background: transparent; border: 1px solid var(--vz-line); }
+.vz-btn--sm { padding: 7px 12px; font-size: 13px; border-radius: 9px; }
+
+/* ---------- toolbar ---------- */
+.vz-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    background: var(--vz-bar);
+    border: 1px solid var(--vz-line);
+    border-radius: 16px;
+    box-shadow: var(--vz-shadow);
+    position: sticky;
+    top: 8px;
+    z-index: 30;
+}
+
+.vz-toolbar__group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-inline-end: 8px;
+    border-inline-end: 1px solid var(--vz-line);
+}
+.vz-toolbar__group:last-child { border-inline-end: 0; padding-inline-end: 0; }
+.vz-toolbar__end { margin-inline-start: auto; flex-wrap: wrap; }
+.vz-toolbar__light { gap: 8px; }
+
+.vz-tbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 0;
+    background: transparent;
+    color: var(--vz-ink);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 9px 11px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background .14s, transform .1s, color .14s;
+    white-space: nowrap;
+}
+.vz-tbtn:hover { background: #f4ecda; }
+.vz-tbtn:active { transform: scale(.94); }
+.vz-tbtn:disabled { opacity: .4; cursor: not-allowed; }
+.vz-tbtn--danger:hover { background: #fdecea; color: #c0392b; }
+.vz-tbtn--cart {
+    background: var(--vz-gold);
+    color: #1a1a1a;
+    padding-inline: 16px;
+    box-shadow: 0 6px 14px rgba(229, 168, 68, .35);
+}
+.vz-tbtn--cart:hover { background: var(--vz-gold-d); }
+.vz-tbtn--cart:disabled { box-shadow: none; }
+
+.vz-ic { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.vz-ic--sun { color: var(--vz-gold-d); }
+
+.vz-zoom { font-size: 12px; font-weight: 700; color: var(--vz-muted); min-width: 42px; text-align: center; }
+
+.vz-toolbar__light input[type=range] {
+    width: 110px;
+    accent-color: var(--vz-gold);
+}
+
+.vz-pulse { animation: vz-pulse .5s ease 2; }
+@keyframes vz-pulse { 50% { box-shadow: 0 0 0 6px rgba(229, 168, 68, .35); background: var(--vz-gold-light); } }
+
+/* ---------- main layout ---------- */
+.vz-main {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 14px;
+    margin-block-start: 14px;
+    align-items: start;
+}
+
+.vz-stagecol {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+}
+
+/* ---------- selected-item inspector (controls below the photo) ---------- */
+.vz-inspector {
+    background: var(--vz-bar);
+    border: 1px solid var(--vz-line);
+    border-radius: 16px;
+    box-shadow: var(--vz-shadow);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.vz-inspector[hidden] { display: none; }
+
+.vz-insp__main { display: flex; align-items: center; gap: 12px; }
+.vz-insp__thumb {
+    width: 46px; height: 46px;
+    object-fit: contain;
+    background: #faf6ee;
+    border: 1px solid var(--vz-line);
+    border-radius: 8px;
+    flex: 0 0 auto;
+}
+.vz-insp__name {
+    flex: 1; min-width: 0;
+    font-weight: 700; font-size: 14px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* directional nudge pad — guarantees precise left/right/up/down movement */
+.vz-insp__nudge {
+    flex: 0 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 30px);
+    grid-template-rows: repeat(3, 28px);
+    gap: 3px;
+    grid-template-areas: ". u ." "l m r" ". d .";
+}
+.vz-insp__nudge [data-move="up"] { grid-area: u; }
+.vz-insp__nudge [data-move="left"] { grid-area: l; }
+.vz-insp__nudge [data-move="right"] { grid-area: r; }
+.vz-insp__nudge [data-move="down"] { grid-area: d; }
+.vz-insp__nudge-mid { grid-area: m; display: flex; align-items: center; justify-content: center; color: var(--vz-muted); font-size: 12px; }
+.vz-insp__nudge button {
+    border: 1px solid var(--vz-line);
+    background: #fbf7ef;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--vz-ink);
+    display: flex; align-items: center; justify-content: center;
+    transition: background .12s, transform .08s;
+}
+.vz-insp__nudge button:hover { background: var(--vz-gold-light); }
+.vz-insp__nudge button:active { transform: scale(.9); }
+
+.vz-insp__sliders { display: flex; gap: 18px; flex-wrap: wrap; }
+.vz-insp__slider {
+    flex: 1; min-width: 150px;
+    display: flex; flex-direction: column; gap: 5px;
+    font-size: 12px; font-weight: 700; color: var(--vz-muted);
+}
+.vz-insp__slider output { color: var(--vz-ink); }
+.vz-insp__slider input[type=range] { width: 100%; accent-color: var(--vz-gold); }
+
+.vz-insp__actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.vz-insp__actions button {
+    border: 1px solid var(--vz-line);
+    background: #fff;
+    border-radius: 9px;
+    padding: 8px 13px;
+    font-family: inherit; font-size: 12.5px; font-weight: 700;
+    color: var(--vz-ink);
+    cursor: pointer;
+    transition: background .12s, border-color .12s, transform .08s;
+}
+.vz-insp__actions button:hover { background: #f4ecda; }
+.vz-insp__actions button:active { transform: scale(.95); }
+.vz-insp__actions button.is-active { background: var(--vz-gold-light); border-color: var(--vz-gold); }
+.vz-insp__del { color: #c0392b; }
+.vz-insp__del:hover { background: #fdecea; }
+
+/* ---------- stage ---------- */
+.vz-viewport {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    border: 1px solid var(--vz-line);
+    background:
+        linear-gradient(45deg, #f0ead9 25%, transparent 25%) -10px 0/22px 22px,
+        linear-gradient(-45deg, #f0ead9 25%, transparent 25%) -10px 0/22px 22px,
+        linear-gradient(45deg, transparent 75%, #f0ead9 75%) -10px 0/22px 22px,
+        linear-gradient(-45deg, transparent 75%, #f0ead9 75%) -10px 0/22px 22px,
+        #faf6ee;
+    min-height: 62vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+}
+
+.vz-stage {
+    position: relative;
+    transform-origin: center center;
+    transition: transform .05s linear;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.vz-canvas {
+    position: relative;
+    max-width: min(100%, 1100px);
+    max-height: 78vh;
+    width: auto;
+    margin: auto;
+    line-height: 0;
+    user-select: none;
+}
+
+.vz-app:not(.vz-has-bg) .vz-canvas { display: none; }
+
+.vz-bg {
+    display: block;
+    max-width: 100%;
+    max-height: 78vh;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+/* ---------- empty state ---------- */
+.vz-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+}
+/* once a room photo is uploaded the prompt must disappear (and stop covering
+   the stage) so the placed products can be moved/selected. The `hidden`
+   attribute alone is overridden by `display:flex` above, so force it here
+   and also hide whenever the app has a background. */
+.vz-empty[hidden],
+.vz-app.vz-has-bg .vz-empty { display: none; }
+.vz-empty__card {
+    background: rgba(255, 255, 255, .9);
+    backdrop-filter: blur(4px);
+    border: 1px dashed #d8caa6;
+    border-radius: 18px;
+    padding: 34px 30px;
+    max-width: 440px;
+    color: var(--vz-muted);
+    box-shadow: var(--vz-shadow);
+}
+.vz-empty__card svg { color: var(--vz-gold); margin-block-end: 8px; }
+.vz-empty__card h2 { margin: 6px 0 8px; color: var(--vz-ink); font-size: 20px; font-weight: 800; }
+.vz-empty__card p { margin: 0 0 16px; font-size: 14px; line-height: 1.6; }
+.vz-empty__hint { display: block; margin-block-start: 12px; font-size: 12px; color: #9a8f78; }
+
+.vz-counter {
+    position: absolute;
+    inset-block-start: 12px;
+    inset-inline-start: 12px;
+    background: rgba(26, 22, 14, .78);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 11px;
+    border-radius: 999px;
+}
+
+/* ---------- placed items ---------- */
+.vz-item {
+    position: absolute;
+    /* physical top/left to match the JS (which sets style.left/style.top).
+       Logical inset-inline-start would become `right` in RTL and, combined
+       with the JS `left` + `width`, over-constrain the box so horizontal
+       movement is ignored. Pin right/bottom to auto to be safe. */
+    top: 0;
+    left: 0;
+    right: auto;
+    bottom: auto;
+    touch-action: none;
+    cursor: grab;
+    will-change: transform;
+}
+.vz-item:active { cursor: grabbing; }
+.vz-item__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    -webkit-user-drag: none;
+}
+
+.vz-item__frame,
+.vz-item__cfg { opacity: 0; pointer-events: none; transition: opacity .12s; }
+
+.vz-item.is-selected .vz-item__frame { opacity: 1; pointer-events: auto; }
+.vz-item--cfg .vz-item__cfg { opacity: 1; }
+
+.vz-item__frame {
+    position: absolute;
+    inset: 0;
+    border: 1.5px solid var(--vz-gold);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .6);
+    border-radius: 2px;
+}
+
+.vz-h {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border: 2px solid var(--vz-gold);
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .25);
+}
+.vz-h--tl { inset-block-start: -8px; inset-inline-start: -8px; cursor: nwse-resize; }
+.vz-h--tr { inset-block-start: -8px; inset-inline-end: -8px; cursor: nesw-resize; }
+.vz-h--bl { inset-block-end: -8px; inset-inline-start: -8px; cursor: nesw-resize; }
+.vz-h--br { inset-block-end: -8px; inset-inline-end: -8px; cursor: nwse-resize; }
+.vz-h--rot {
+    inset-block-start: -34px;
+    inset-inline-start: 50%;
+    transform: translateX(50%);
+    cursor: grab;
+    background: var(--vz-gold);
+}
+.vz-h--rot::after {
+    content: "";
+    position: absolute;
+    inset-block-start: 14px;
+    inset-inline-start: 50%;
+    width: 2px;
+    height: 18px;
+    background: var(--vz-gold);
+    transform: translateX(-50%);
+    z-index: -1;
+}
+
+.vz-item__cfg {
+    position: absolute;
+    inset-block-start: -10px;
+    inset-inline-end: -10px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #e08a2b;
+    color: #fff;
+    font-weight: 800;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+}
+
+/* ---------- sidebar / product picker ---------- */
+.vz-sidebar {
+    display: flex;
+    flex-direction: column;
+    background: var(--vz-bar);
+    border: 1px solid var(--vz-line);
+    border-radius: 18px;
+    box-shadow: var(--vz-shadow);
+    overflow: hidden;
+    max-height: 80vh;
+}
+.vz-sidebar__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-block-end: 1px solid var(--vz-line);
+}
+.vz-sidebar__head h2 { margin: 0; font-size: 16px; font-weight: 800; }
+.vz-sidebar__close { display: none; border: 0; background: transparent; font-size: 18px; cursor: pointer; color: var(--vz-muted); }
+
+.vz-sidebar__filters { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; }
+.vz-sidebar__filters input,
+.vz-sidebar__filters select {
+    width: 100%;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 10px 12px;
+    border: 1px solid var(--vz-line);
+    border-radius: 10px;
+    background: #fbf7ef;
+    color: var(--vz-ink);
+}
+.vz-sidebar__filters input:focus,
+.vz-sidebar__filters select:focus { outline: 2px solid var(--vz-gold); border-color: transparent; }
+
+.vz-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 4px 14px 10px;
+    overflow-y: auto;
+}
+.vz-pcard {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border: 1px solid var(--vz-line);
+    border-radius: 12px;
+    padding: 8px;
+    background: #fff;
+    cursor: pointer;
+    text-align: start;
+    font-family: inherit;
+    transition: transform .12s, box-shadow .15s, border-color .15s;
+}
+.vz-pcard:hover { transform: translateY(-2px); box-shadow: var(--vz-shadow); border-color: var(--vz-gold); }
+.vz-pcard__img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 92px;
+    background: #faf6ee;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.vz-pcard__img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.vz-pcard__name {
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 34px;
+}
+.vz-pcard__price { font-size: 13px; font-weight: 800; color: var(--vz-gold-d); }
+.vz-pcard__add { font-size: 11px; font-weight: 700; color: var(--vz-muted); margin-block-start: 2px; }
+
+.vz-grid__status { padding: 6px 16px; font-size: 13px; color: var(--vz-muted); text-align: center; }
+.vz-loadmore { margin: 0 14px 14px; }
+
+/* ---------- mobile product FAB ---------- */
+.vz-fab {
+    display: none;
+    position: fixed;
+    inset-block-end: calc(72px + env(safe-area-inset-bottom, 0px));
+    inset-inline-end: 16px;
+    z-index: 950;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    width: 60px;
+    height: 60px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--vz-gold);
+    color: #1a1a1a;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(229, 168, 68, .5);
+}
+
+/* ---------- modal ---------- */
+.vz-modal { position: fixed; inset: 0; z-index: 1200; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.vz-modal[hidden] { display: none; }
+.vz-modal__backdrop { position: absolute; inset: 0; background: rgba(20, 16, 10, .55); backdrop-filter: blur(2px); }
+.vz-modal__panel {
+    position: relative;
+    width: min(460px, 100%);
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .3);
+    overflow: hidden;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+.vz-modal__head { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border-block-end: 1px solid var(--vz-line); }
+.vz-modal__head h3 { margin: 0; font-size: 17px; font-weight: 800; }
+.vz-modal__x { border: 0; background: transparent; font-size: 18px; cursor: pointer; color: var(--vz-muted); }
+.vz-modal__body { padding: 14px 18px 20px; overflow-y: auto; }
+.vz-modal__empty { color: var(--vz-muted); text-align: center; padding: 20px 0; }
+
+.vz-designs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.vz-designs li { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid var(--vz-line); border-radius: 10px; }
+.vz-designs li > span:first-child { font-weight: 600; font-size: 14px; }
+.vz-designs__btns { display: flex; gap: 6px; }
+
+/* ---------- toast ---------- */
+.vz-toast {
+    position: fixed;
+    inset-block-end: 24px;
+    inset-inline-start: 50%;
+    transform: translate(50%, 24px);
+    z-index: 1300;
+    max-width: min(90vw, 460px);
+    padding: 12px 20px;
+    border-radius: 12px;
+    background: #1a160e;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s, transform .2s;
+}
+.vz-toast.is-on { opacity: 1; transform: translate(50%, 0); }
+.vz-toast--success { background: #1f7a4d; }
+.vz-toast--error { background: #b23b32; }
+.vz-toast--info { background: #1a160e; }
+
+/* ============================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 900px) {
+    .vz-main { grid-template-columns: 1fr; }
+
+    .vz-fab { display: flex; }
+    /* hide the product FAB while the inspector sheet is up (avoid overlap) */
+    .vz-has-sel .vz-fab { display: none; }
+
+    /* product picker becomes a slide-up sheet */
+    .vz-sidebar {
+        position: fixed;
+        inset-inline: 0;
+        inset-block-end: 0;
+        z-index: 1100;
+        max-height: 74vh;
+        border-radius: 18px 18px 0 0;
+        transform: translateY(105%);
+        transition: transform .28s cubic-bezier(.22, .61, .36, 1);
+        padding-block-end: env(safe-area-inset-bottom, 0px);
+    }
+    .vz-show-picker .vz-sidebar { transform: translateY(0); }
+    .vz-show-picker .vz-fab { display: none; }
+    .vz-sidebar__close { display: inline-flex; }
+
+    /* inspector becomes a compact bottom sheet sitting ABOVE the site tab bar */
+    .vz-inspector {
+        position: fixed;
+        inset-inline: 8px;
+        inset-block-end: calc(66px + env(safe-area-inset-bottom, 0px));
+        z-index: 1010;
+        border-radius: 16px;
+        padding: 10px 12px;
+        gap: 10px;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, .22);
+    }
+
+    /* ---- app-like, compact picker (tighter padding/margins on mobile) ---- */
+    .vz-sidebar__head { padding: 11px 13px; }
+    .vz-sidebar__head h2 { font-size: 15px; }
+    .vz-sidebar__filters { padding: 9px 11px; gap: 7px; }
+    .vz-sidebar__filters input,
+    .vz-sidebar__filters select { padding: 9px 11px; font-size: 13.5px; border-radius: 9px; }
+    .vz-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 4px 11px 10px; }
+    .vz-pcard { padding: 6px; border-radius: 10px; gap: 3px; }
+    .vz-pcard__img { height: 74px; border-radius: 7px; }
+    .vz-pcard__name { font-size: 11.5px; min-height: 30px; }
+    .vz-pcard__price { font-size: 12px; }
+    .vz-pcard__add { display: none; }
+    .vz-grid__status { padding: 6px 12px; }
+    .vz-loadmore { margin: 0 11px 12px; }
+}
+
+@media (max-width: 640px) {
+    .vz-app { margin-block-end: 80px; }
+    .vz-hero { padding: 18px; border-radius: 18px; }
+    .vz-hero__title { font-size: 22px; }
+    .vz-hero__sub { font-size: 13px; }
+    .vz-hero__cta { width: 100%; justify-content: center; }
+
+    .vz-toolbar { gap: 6px; padding: 8px; border-radius: 14px; top: 4px; }
+    .vz-toolbar__group { padding-inline-end: 6px; }
+    .vz-tbtn { padding: 9px; }
+    .vz-tbtn span { display: none; }
+    .vz-tbtn--cart span { display: inline; }
+    .vz-toolbar__light input[type=range] { width: 72px; }
+
+    .vz-viewport { min-height: 54vh; border-radius: 14px; }
+
+    /* two dense columns of products — app-store feel */
+    .vz-grid { grid-template-columns: 1fr 1fr; gap: 8px; padding: 4px 10px 10px; }
+    .vz-pcard__img { height: 88px; }
+
+    /* inspector: keep actions on one scrollable row, smaller controls */
+    .vz-insp__main { gap: 9px; }
+    .vz-insp__thumb { width: 40px; height: 40px; }
+    .vz-insp__name { font-size: 13px; }
+    .vz-insp__sliders { gap: 12px; }
+    .vz-insp__slider { min-width: 120px; }
+    .vz-insp__actions {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-block-end: 2px;
+    }
+    .vz-insp__actions::-webkit-scrollbar { display: none; }
+    .vz-insp__actions button { flex: 0 0 auto; padding: 8px 11px; font-size: 12px; }
+}
+
+@media (max-width: 380px) {
+    .vz-tbtn--cart span { display: none; }
+}

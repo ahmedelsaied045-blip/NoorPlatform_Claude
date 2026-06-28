@@ -922,6 +922,15 @@ html[dir="rtl"] .search-box form,
   background-color: #faf5ec;
 }
 
+/* On phones the 100px side padding squeezed the whole homepage (and the
+   product carousels) into a narrow centred strip — use small edge padding. */
+@media all and (max-width: 768px) {
+  .home-page .page-body { padding: 20px 16px 48px; }
+}
+@media all and (max-width: 480px) {
+  .home-page .page-body { padding: 16px 12px 40px; }
+}
+
 .home-page .page-body > * {
   width: 100%;
   margin-bottom: 56px;
@@ -4085,6 +4094,36 @@ html[dir="rtl"] .search-box form,
     height: 24px;
   }
 
+  /* wrapper lets the count badge sit on the cart icon */
+  .noor-tabbar__icon {
+    position: relative;
+    display: inline-flex;
+    line-height: 0;
+  }
+
+  .noor-tabbar__badge {
+    position: absolute;
+    inset-block-start: -6px;
+    inset-inline-end: -8px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--noor-gold);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .noor-tabbar__badge[hidden] {
+    display: none;
+  }
+
   .noor-tabbar__item.is-active {
     color: var(--noor-gold-hover);
   }
@@ -4212,3 +4251,72 @@ html[dir="rtl"] .search-box form,
     background-color: var(--noor-gold-light);
   }
 }
+
+/* ==========================================================================
+   "Visualize Before You Buy" homepage promo banner
+   ========================================================================== */
+.noor-visualize-promo {
+  margin-block: 10px;
+}
+
+.noor-vzpromo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 38px 40px;
+  border-radius: var(--noor-radius-lg, 24px);
+  background:
+    radial-gradient(900px 300px at 0% 0%, rgba(229, 168, 68, .22), transparent 60%),
+    linear-gradient(135deg, #211c12, #14110b);
+  color: #fff;
+  overflow: hidden;
+}
+
+.noor-vzpromo__title {
+  margin: 8px 0 10px;
+  font-size: 30px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.noor-vzpromo__sub {
+  margin: 0 0 20px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #e9ddc7;
+  max-width: 62ch;
+}
+
+.noor-vzpromo__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 26px;
+  border-radius: 12px;
+  background: var(--noor-gold);
+  color: #1a1a1a;
+  font-weight: 800;
+  font-size: 15px;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(229, 168, 68, .4);
+  transition: transform .14s, background .15s;
+}
+.noor-vzpromo__btn:hover { background: var(--noor-gold-hover); transform: translateY(-2px); color: #1a1a1a; }
+
+.noor-vzpromo__art {
+  flex: 0 0 auto;
+  color: rgba(229, 168, 68, .55);
+}
+.noor-vzpromo__art svg { width: 150px; height: 150px; }
+
+@media all and (max-width: 768px) {
+  .noor-vzpromo { padding: 26px 22px; gap: 16px; }
+  .noor-vzpromo__title { font-size: 23px; }
+  .noor-vzpromo__sub { font-size: 14px; }
+  .noor-vzpromo__art { display: none; }
+}
+
+/* The "Visualize" menu-bar entry styling is emitted inline in the MainMenu
+   component override (Themes/.../Components/MainMenu/Default.cshtml) so it
+   applies immediately without waiting on this cached stylesheet. */

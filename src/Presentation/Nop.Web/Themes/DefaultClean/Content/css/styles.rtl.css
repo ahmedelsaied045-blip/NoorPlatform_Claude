@@ -8939,7 +8939,7 @@ label, label + * {
 
   .login-page .new-wrapper {
     float: right;
-    width: 49%;
+    width: 100%;
     margin: 0;
   }
 

@@ -114,6 +114,11 @@ public static partial class NopRouteNames
         /// Gets the gift card balance route name
         /// </summary>
         public const string CHECK_GIFT_CARD_BALANCE = "CheckGiftCardBalance";
+
+        /// <summary>
+        /// Gets the "Visualize Before You Buy" room visualizer route name
+        /// </summary>
+        public const string VISUALIZE = "Visualize";
     }
 
     /// <summary>
@@ -847,5 +852,10 @@ public static partial class NopRouteNames
         /// Gets the return request with "upload file" support route name
         /// </summary>
         public const string UPLOAD_FILE_RETURN_REQUEST = "UploadFileReturnRequest";
+
+        /// <summary>
+        /// Gets the "Visualize Before You Buy" product list (JSON) route name
+        /// </summary>
+        public const string VISUALIZE_PRODUCTS = "VisualizeProducts";
     }
 }

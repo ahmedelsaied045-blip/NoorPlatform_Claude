@@ -23,7 +23,9 @@
       "Bash(cat ../../../../../global.json)",
       "Bash(awk 'NR>=1712' noor-lighting.css)",
       "PowerShell(Get-PSDrive -PSProvider FileSystem | Select-Object Name, @{N='UsedGB';E={[math]::Round\\($_.Used/1GB,1\\)}}, @{N='FreeGB';E={[math]::Round\\($_.Free/1GB,2\\)}} | Format-Table -AutoSize)",
-      "PowerShell(Select-String *)"
+      "PowerShell(Select-String *)",
+      "Bash(dotnet build *)",
+      "Skill(run)"
     ]
   }
 }

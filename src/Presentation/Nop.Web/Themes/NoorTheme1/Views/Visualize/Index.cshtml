@@ -1,0 +1,177 @@
+@model Nop.Web.Models.Visualize.VisualizeIndexModel
+@inject Nop.Web.Framework.Themes.IThemeContext themeContext
+@{
+    Layout = "_ColumnsOne";
+    var themeName = await themeContext.GetWorkingThemeNameAsync();
+    // bump this token whenever the visualizer CSS/JS changes — the changed URL
+    // busts the 1-year static-file cache so users get the update immediately
+    var vzVer = "20260628c";
+    NopHtml.AddTitleParts("تصوّر قبل الشراء");
+    NopHtml.AddMetaDescriptionParts("ارفع صورة غرفتك وجرّب منتجات نور عليها قبل الشراء — اسحب، كبّر، دوّر، وأضفها للسلة بنقرة واحدة.");
+    NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/noor-visualize.css?v={vzVer}");
+}
+
+@* the antiforgery token guarantees addAntiForgeryToken() can find it for Add-All-to-Cart *@
+@Html.AntiForgeryToken()
+
+<div id="vzApp" class="vz-app" dir="rtl">
+
+    <header class="vz-hero">
+        <div class="vz-hero__text">
+            <h1 class="vz-hero__title">تصوّر قبل الشراء</h1>
+            <p class="vz-hero__sub">ارفع صورة غرفتك، ضَع منتجات نور عليها، وشاهد كيف ستبدو — بتجربة قريبة من الواقع.</p>
+        </div>
+        <button type="button" class="vz-btn vz-btn--primary vz-hero__cta" data-vz="upload">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M5 20h14"/></svg>
+            ارفع صورة الغرفة
+        </button>
+    </header>
+
+    <div class="vz-toolbar" role="toolbar" aria-label="أدوات التصميم">
+        <div class="vz-toolbar__group">
+            <button class="vz-tbtn" data-vz="upload" title="رفع/تغيير الصورة"><svg viewBox="0 0 24 24" class="vz-ic"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M5 20h14"/></svg><span>الصورة</span></button>
+            <button class="vz-tbtn" data-vz="toggle-products" title="المنتجات"><svg viewBox="0 0 24 24" class="vz-ic"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>المنتجات</span></button>
+        </div>
+
+        <div class="vz-toolbar__group">
+            <button class="vz-tbtn" data-vz="undo" title="تراجع"><svg viewBox="0 0 24 24" class="vz-ic"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg></button>
+            <button class="vz-tbtn" data-vz="redo" title="إعادة"><svg viewBox="0 0 24 24" class="vz-ic"><path d="m15 14 5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h3"/></svg></button>
+        </div>
+
+        <div class="vz-toolbar__group">
+            <button class="vz-tbtn" data-vz="zoomout" title="تصغير"><svg viewBox="0 0 24 24" class="vz-ic"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/><path d="M8 11h6"/></svg></button>
+            <span id="vzZoomLabel" class="vz-zoom">100%</span>
+            <button class="vz-tbtn" data-vz="zoomin" title="تكبير"><svg viewBox="0 0 24 24" class="vz-ic"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg></button>
+            <button class="vz-tbtn" data-vz="zoomreset" title="إعادة ضبط العرض"><svg viewBox="0 0 24 24" class="vz-ic"><path d="M3 12a9 9 0 1 0 9-9 9 9 0 0 0-6.4 2.6L3 8"/><path d="M3 4v4h4"/></svg></button>
+        </div>
+
+        <div class="vz-toolbar__group vz-toolbar__light">
+            <svg viewBox="0 0 24 24" class="vz-ic vz-ic--sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>
+            <input id="vzLight" type="range" min="0" max="360" value="135" title="اتجاه الإضاءة والظل" aria-label="اتجاه الإضاءة">
+        </div>
+
+        <div class="vz-toolbar__group vz-toolbar__end">
+            <button class="vz-tbtn" data-vz="save" title="حفظ التصميم"><svg viewBox="0 0 24 24" class="vz-ic"><path d="M5 3h11l3 3v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v5h8"/><path d="M7 21v-7h10v7"/></svg></button>
+            <button class="vz-tbtn" data-vz="load" title="تصاميمي"><svg viewBox="0 0 24 24" class="vz-ic"><path d="M3 7h6l2 2h10v9a2 2 0 0 1-2 2H3z"/></svg></button>
+            <button class="vz-tbtn" data-vz="download" title="تنزيل الصورة"><svg viewBox="0 0 24 24" class="vz-ic"><path d="M12 4v12"/><path d="m7 11 5 5 5-5"/><path d="M5 20h14"/></svg></button>
+            <button class="vz-tbtn" data-vz="share" title="مشاركة"><svg viewBox="0 0 24 24" class="vz-ic"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+            <button class="vz-tbtn vz-tbtn--danger" data-vz="clear" title="مسح الكل"><svg viewBox="0 0 24 24" class="vz-ic"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 14h10l1-14"/></svg></button>
+            <button class="vz-tbtn vz-tbtn--cart" data-vz="addall" title="أضف الكل للسلة">
+                <svg viewBox="0 0 24 24" class="vz-ic"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 12.4a1.5 1.5 0 0 0 1.5 1.2h8.3a1.5 1.5 0 0 0 1.5-1.2L23 7H6"/></svg>
+                <span>أضف الكل للسلة</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="vz-main">
+      <div class="vz-stagecol">
+        <!-- Stage -->
+        <div id="vzViewport" class="vz-viewport">
+            <div id="vzStage" class="vz-stage">
+                <div id="vzCanvas" class="vz-canvas">
+                    <img id="vzBg" class="vz-bg" alt="">
+                    <!-- product items are injected here -->
+                </div>
+            </div>
+
+            <div id="vzEmpty" class="vz-empty">
+                <div class="vz-empty__card">
+                    <svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L7 20"/></svg>
+                    <h2>ابدأ بصورة غرفتك</h2>
+                    <p>ارفع صورة المكان الذي تريد تجربة المنتجات فيه، ثم اختر منتجًا من القائمة وضَعه على الصورة.</p>
+                    <button type="button" class="vz-btn vz-btn--primary" data-vz="upload">رفع صورة الغرفة</button>
+                    <span class="vz-empty__hint">يدعم JPG و PNG — تُعالَج الصورة على جهازك ولا تُرفع لأي خادم.</span>
+                </div>
+            </div>
+
+            <div class="vz-counter" hidden><span id="vzItemCount">0</span> منتج</div>
+        </div>
+
+        <!-- Selected-product inspector (controls stay below the photo) -->
+        <div id="vzInspector" class="vz-inspector" hidden>
+            <div class="vz-insp__main">
+                <img id="vzInspThumb" class="vz-insp__thumb" alt="">
+                <span id="vzInspName" class="vz-insp__name"></span>
+                <div class="vz-insp__nudge" aria-label="تحريك المنتج">
+                    <button type="button" data-move="up" title="أعلى">▲</button>
+                    <button type="button" data-move="left" title="يسار">◀</button>
+                    <span class="vz-insp__nudge-mid">↔</span>
+                    <button type="button" data-move="right" title="يمين">▶</button>
+                    <button type="button" data-move="down" title="أسفل">▼</button>
+                </div>
+            </div>
+            <div class="vz-insp__sliders">
+                <label class="vz-insp__slider">
+                    <span>تدوير <output id="vzRotVal">0°</output></span>
+                    <input id="vzRot" type="range" min="-180" max="180" value="0" step="1">
+                </label>
+                <label class="vz-insp__slider">
+                    <span>الحجم</span>
+                    <input id="vzSize" type="range" min="5" max="120" value="28" step="1">
+                </label>
+            </div>
+            <div class="vz-insp__actions">
+                <button type="button" data-i="flip">عكس</button>
+                <button type="button" data-i="bg">الخلفية</button>
+                <button type="button" data-i="floor">أرضية</button>
+                <button type="button" data-i="shadow">ظل</button>
+                <button type="button" data-i="front">للأمام</button>
+                <button type="button" data-i="back">للخلف</button>
+                <button type="button" data-i="dup">تكرار</button>
+                <button type="button" data-i="del" class="vz-insp__del">حذف</button>
+            </div>
+        </div>
+      </div>
+
+        <!-- Product picker -->
+        <aside id="vzSidebar" class="vz-sidebar" aria-label="اختيار المنتجات">
+            <div class="vz-sidebar__head">
+                <h2>اختر منتجًا</h2>
+                <button type="button" class="vz-sidebar__close" data-vz="close-picker" aria-label="إغلاق">✕</button>
+            </div>
+            <div class="vz-sidebar__filters">
+                <input id="vzSearch" type="search" placeholder="ابحث عن منتج…" autocomplete="off">
+                <select id="vzCategory" aria-label="التصنيف">
+                    <option value="0">كل التصنيفات</option>
+                    @foreach (var c in Model.Categories)
+                    {
+                        <option value="@c.Id">@c.Name</option>
+                    }
+                </select>
+            </div>
+            <div id="vzGrid" class="vz-grid"></div>
+            <div id="vzGridStatus" class="vz-grid__status"></div>
+            <button id="vzLoadMore" class="vz-btn vz-btn--ghost vz-loadmore" type="button" hidden>عرض المزيد</button>
+        </aside>
+    </div>
+
+    <!-- floating product-picker FAB for mobile -->
+    <button type="button" class="vz-fab" data-vz="toggle-products" aria-label="المنتجات">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        <span>منتج</span>
+    </button>
+
+    <!-- modal (saved designs) -->
+    <div id="vzModal" class="vz-modal" hidden>
+        <div class="vz-modal__backdrop" data-vz="modal-close"></div>
+        <div class="vz-modal__panel" role="dialog" aria-modal="true">
+            <div class="vz-modal__head">
+                <h3 id="vzModalTitle"></h3>
+                <button type="button" class="vz-modal__x" data-vz="modal-close" aria-label="إغلاق">✕</button>
+            </div>
+            <div id="vzModalBody" class="vz-modal__body"></div>
+        </div>
+    </div>
+
+    <div id="vzToast" class="vz-toast" role="status" aria-live="polite"></div>
+
+    <input id="vzFile" type="file" accept="image/*" hidden>
+</div>
+
+<script asp-location="Footer">
+    window.NoorVisualizeConfig = {
+        productsUrl: '@Url.RouteUrl(Nop.Core.Http.NopRouteNames.Ajax.VISUALIZE_PRODUCTS)',
+        addToCartUrlBase: '/addproducttocart/catalog/'
+    };
+</script>
+<script src="~/Themes/@(themeName)/Content/js/noor-visualize.js?v=@vzVer" asp-location="Footer"></script>

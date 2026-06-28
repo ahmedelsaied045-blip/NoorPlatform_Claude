@@ -8948,7 +8948,7 @@ label, label + * {
 
   .login-page .returning-wrapper {
     float: left;
-    width: 49%;
+    width: 100%;
   }
 
   .login-page .returning-wrapper .form-fields {

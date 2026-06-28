@@ -31,6 +31,16 @@ public partial class RouteProvider : BaseRouteProvider, IRouteProvider
             pattern: $"{lang}",
             defaults: new { controller = "Home", action = "Index" });
 
+        //"Visualize Before You Buy" room visualizer
+        endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.General.VISUALIZE,
+            pattern: $"{lang}/visualize",
+            defaults: new { controller = "Visualize", action = "Index" });
+
+        //"Visualize Before You Buy" product list (JSON; no language pattern needed for AJAX)
+        endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.Ajax.VISUALIZE_PRODUCTS,
+            pattern: "visualize/products",
+            defaults: new { controller = "Visualize", action = "Products" });
+
         //login
         endpointRouteBuilder.MapControllerRoute(name: NopRouteNames.General.LOGIN,
             pattern: $"{lang}/login/",

@@ -13,8 +13,11 @@
     //add main CSS file
     NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/styles{(supportRtl ? ".rtl" : "")}.css");
 
-    // Noor Lighting custom styles
-    NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/noor-lighting.css");
+    // Noor Lighting custom styles.
+    // Bump this token whenever noor-lighting.css changes — static files are cached
+    // for a year with no version, so the changed URL is what busts the cache.
+    var noorCssVer = "20260628a";
+    NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/noor-lighting.css?v={noorCssVer}");
 
     // Noor Lighting carousel (home-page category/product navigation)
     NopHtml.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/noor-carousel.js", excludeFromBundle: true);

@@ -1,0 +1,63 @@
+@model MenuModel
+
+@using Nop.Core.Domain.Menus;
+@using Nop.Core.Http;
+@using Nop.Web.Models.Menus;
+
+<script src="~/js/public.menu.js" asp-location="Footer"></script>
+<script asp-location="Footer">
+    mainMenu.init('.menu-container .menu__toggle, .menu-container .menu__item-toggle', 'menu-dropdown--active');
+</script>
+
+<style>
+    /* "Visualize" entry in the navigation menu bar (icon + gold highlight).
+       Inlined here so it is not subject to the long-cached theme stylesheet. */
+    .menu__link--visualize {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: var(--noor-gold) !important;
+        font-weight: 800;
+    }
+    .menu__link--visualize .menu__link-ico { flex: 0 0 auto; }
+    .menu__link--visualize:hover,
+    .menu__link--visualize:focus { color: var(--noor-gold-hover) !important; }
+    @@media all and (max-width: 768px) {
+        .menu__item--visualize .menu__link--visualize { gap: 10px; }
+    }
+</style>
+
+
+<nav class="menu-container menu-dropdown">
+    <div id="menu-@Model.Id" class="menu__toggle" role="button">@Model.Name</div>
+    <div role="menu" class="menu @Model.CssClass" aria-labelledby="menu-@Model.Id">
+        @* Custom highlighted entry for the "Visualize Before You Buy" tool *@
+        <div class="menu__item menu__item--visualize" role="menuitem">
+            <a href="@Url.RouteUrl(NopRouteNames.General.VISUALIZE)" class="menu__link menu__link--visualize" tabindex="0">
+                <svg class="menu__link-ico" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L7 20"/></svg>
+                <span>تصوّر قبل الشراء</span>
+            </a>
+        </div>
+        @foreach (var menuItem in Model.Items)
+        {
+            @if (menuItem.ChildrenItems.Any())
+            {
+                @switch (menuItem.Template)
+                {
+                    case MenuItemTemplate.Grid:
+                        @await Html.PartialAsync("~/Views/Shared/Components/MainMenu/_MenuItem.Grid.cshtml", menuItem)
+                        break;
+                    default:
+                        @await Html.PartialAsync("~/Views/Shared/Components/MainMenu/_MenuItem.List.cshtml", menuItem)
+                        break;
+                }
+            }
+            else
+            {
+                <div class="menu__item @menuItem.CssClass" role="menuitem">
+                    @await Html.PartialAsync("~/Views/Shared/Components/MainMenu/_MenuItem.cshtml", menuItem)
+                </div>
+            }
+        }
+    </div>
+</nav>
