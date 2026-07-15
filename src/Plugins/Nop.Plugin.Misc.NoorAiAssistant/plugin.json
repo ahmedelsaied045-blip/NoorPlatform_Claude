@@ -1,0 +1,11 @@
+{
+  "Group": "Misc",
+  "FriendlyName": "Noor AI Sales Assistant",
+  "SystemName": "Misc.NoorAiAssistant",
+  "Version": "1.00",
+  "SupportedVersions": [ "4.90" ],
+  "Author": "Noor",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Misc.NoorAiAssistant.dll",
+  "Description": "A bilingual (AR/EN) AI sales assistant: product search, smart recommendations, product comparison, lighting & quantity estimation and FAQ. Ships with a provider-agnostic chat abstraction (IChatProvider) so a real LLM can be plugged in later without touching business logic."
+}

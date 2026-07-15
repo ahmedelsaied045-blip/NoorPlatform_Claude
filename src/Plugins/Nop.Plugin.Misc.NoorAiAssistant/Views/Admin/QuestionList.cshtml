@@ -1,0 +1,116 @@
+@model SuggestedQuestionSearchModel
+
+@{
+    ViewBag.PageTitle = T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.SuggestedQuestions").Text;
+    NopHtml.SetActiveMenuItemSystemName(NoorAiAssistantDefaults.ADMIN_MENU_QUESTIONS_SYSTEM_NAME);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.SuggestedQuestions")
+    </h1>
+    <div class="float-right">
+        <a asp-controller="NoorAiAssistantAdmin" asp-action="QuestionCreate" class="btn btn-primary">
+            <i class="fas fa-plus-square"></i>
+            @T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.SuggestedQuestions.AddNew")
+        </a>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="alert alert-info mb-0">
+                            @T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.SuggestedQuestions.Hint")
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row opened" data-hideAttribute="NoorAiQuestionSearch">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="fas fa-chevron-up" aria-hidden="true"></i></div>
+                        </div>
+
+                        <div class="search-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchKeywords" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchKeywords" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-questions" class="btn btn-primary btn-search">
+                                        <i class="fas fa-magnifying-glass"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "questions-grid",
+                            UrlRead = new DataUrl("QuestionList", "NoorAiAssistantAdmin", null),
+                            SearchButtonId = "search-questions",
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            Filters = new List<FilterParameter>
+                            {
+                                new(nameof(Model.SearchKeywords))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new(nameof(SuggestedQuestionModel.Text))
+                                {
+                                    Title = T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.SuggestedQuestions.Fields.Text").Text
+                                },
+                                new(nameof(SuggestedQuestionModel.LanguageName))
+                                {
+                                    Title = T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.SuggestedQuestions.Fields.Language").Text,
+                                    Width = "150"
+                                },
+                                new(nameof(SuggestedQuestionModel.DisplayOrder))
+                                {
+                                    Title = T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.SuggestedQuestions.Fields.DisplayOrder").Text,
+                                    Width = "110",
+                                    ClassName = NopColumnClassDefaults.CenterAll
+                                },
+                                new(nameof(SuggestedQuestionModel.Published))
+                                {
+                                    Title = T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.SuggestedQuestions.Fields.Published").Text,
+                                    Width = "110",
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderBoolean()
+                                },
+                                new(nameof(SuggestedQuestionModel.Id))
+                                {
+                                    Title = T("Admin.Common.Edit").Text,
+                                    Width = "100",
+                                    ClassName = NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonEdit(new DataUrl("QuestionEdit"))
+                                }
+                            }
+                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,47 @@
+@model FaqModel
+
+@{
+    ViewBag.PageTitle = T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Faq.EditDetails").Text;
+    NopHtml.SetActiveMenuItemSystemName(NoorAiAssistantDefaults.ADMIN_MENU_FAQ_SYSTEM_NAME);
+}
+
+<form asp-controller="NoorAiAssistantAdmin" asp-action="FaqEdit" method="post" id="faq-form">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Faq.EditDetails")
+            <small>
+                <i class="fas fa-arrow-turn-up"></i>
+                <a asp-controller="NoorAiAssistantAdmin" asp-action="FaqList">
+                    @T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Faq.BackToList")
+                </a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-floppy-disk"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn btn-primary">
+                <i class="far fa-floppy-disk"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+            <nop-delete-confirmation asp-model-id="@Model.Id" asp-button-id="faq-delete" asp-action="FaqDelete" />
+            <button type="button" id="faq-delete" class="btn btn-danger">
+                <i class="far fa-trash-can"></i>
+                @T("Admin.Common.Delete")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default">
+                        @await Html.PartialAsync("~/Plugins/Misc.NoorAiAssistant/Views/Admin/_CreateOrUpdateFaq.cshtml", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

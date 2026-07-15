@@ -10,13 +10,16 @@
     var themeName = await themeContext.GetWorkingThemeNameAsync();
     var supportRtl = await Html.ShouldUseRtlThemeAsync();
 
-    //add main CSS file
-    NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/styles{(supportRtl ? ".rtl" : "")}.css");
+    // Cache-buster for theme CSS. Static files are served with a 1-year
+    // Cache-Control (StaticFilesCacheControl in appsettings.json), so without a
+    // version in the URL, published CSS changes never reach returning visitors.
+    // Bump this token whenever styles.css / styles.rtl.css / noor-lighting.css change.
+    var noorCssVer = "20260701a";
+
+    //add main CSS file (versioned so edits show up after publish)
+    NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/styles{(supportRtl ? ".rtl" : "")}.css?v={noorCssVer}");
 
     // Noor Lighting custom styles.
-    // Bump this token whenever noor-lighting.css changes — static files are cached
-    // for a year with no version, so the changed URL is what busts the cache.
-    var noorCssVer = "20260628a";
     NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/noor-lighting.css?v={noorCssVer}");
 
     // Noor Lighting carousel (home-page category/product navigation)
