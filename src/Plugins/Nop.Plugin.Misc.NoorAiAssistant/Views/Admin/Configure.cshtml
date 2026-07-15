@@ -1,0 +1,219 @@
+@model ConfigurationModel
+
+@{
+    Layout = "_ConfigurePlugin";
+}
+
+<form asp-controller="NoorAiAssistantAdmin" asp-action="Configure" method="post">
+    <div class="cards-group">
+        <div class="card card-default">
+            <div class="card-body">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+
+                <div class="alert alert-info">
+                    <p>
+                        The assistant answers from <strong>your own catalogue and FAQ</strong> — no external AI service is
+                        called and nothing is sent off-site. It recognises what a shopper is asking for, searches your
+                        products, matches your FAQ, compares two products, and sizes the lighting for a room.
+                    </p>
+                    <p class="mb-0">
+                        When you're ready to put a real language model behind it, add one class implementing
+                        <code>IChatProvider</code>, register it in DI, and pick it in <em>AI provider</em> below.
+                        Nothing else in the plugin changes.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        @* ---------- general ---------- *@
+        <nop-card asp-name="noor-ai-general" asp-icon="fas fa-cogs" asp-title="@T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Configuration.General")" asp-hide-block-attribute-name="noorAiGeneral" asp-hide="false" asp-advanced="false">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="Enabled_OverrideForStore" asp-input="Enabled" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="Enabled" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="Enabled" />
+                    <span asp-validation-for="Enabled"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="ActiveProviderSystemName_OverrideForStore" asp-input="ActiveProviderSystemName" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="ActiveProviderSystemName" />
+                </div>
+                <div class="col-md-9">
+                    <nop-select asp-for="ActiveProviderSystemName" asp-items="Model.AvailableProviders" />
+                    <span asp-validation-for="ActiveProviderSystemName"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="MaxHistoryMessages_OverrideForStore" asp-input="MaxHistoryMessages" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="MaxHistoryMessages" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="MaxHistoryMessages" />
+                    <span asp-validation-for="MaxHistoryMessages"></span>
+                </div>
+            </div>
+        </nop-card>
+
+        @* ---------- appearance ---------- *@
+        <nop-card asp-name="noor-ai-appearance" asp-icon="fas fa-paint-brush" asp-title="@T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Configuration.Appearance")" asp-hide-block-attribute-name="noorAiAppearance" asp-hide="false" asp-advanced="false">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="ThemeColor_OverrideForStore" asp-input="ThemeColor" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="ThemeColor" />
+                </div>
+                <div class="col-md-9">
+                    <input asp-for="ThemeColor" type="color" class="form-control" style="max-width: 90px; height: 38px; padding: 3px;" />
+                    <span asp-validation-for="ThemeColor"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="WelcomeMessage_OverrideForStore" asp-input="WelcomeMessage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="WelcomeMessage" />
+                </div>
+                <div class="col-md-9">
+                    <nop-textarea asp-for="WelcomeMessage" />
+                    <span asp-validation-for="WelcomeMessage"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="WelcomeMessageAr_OverrideForStore" asp-input="WelcomeMessageAr" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="WelcomeMessageAr" />
+                </div>
+                <div class="col-md-9">
+                    <nop-textarea asp-for="WelcomeMessageAr" dir="rtl" />
+                    <span asp-validation-for="WelcomeMessageAr"></span>
+                </div>
+            </div>
+        </nop-card>
+
+        @* ---------- capabilities ---------- *@
+        <nop-card asp-name="noor-ai-capabilities" asp-icon="fas fa-wand-magic-sparkles" asp-title="@T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Configuration.Capabilities")" asp-hide-block-attribute-name="noorAiCapabilities" asp-hide="false" asp-advanced="false">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="AllowProductRecommendation_OverrideForStore" asp-input="AllowProductRecommendation" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="AllowProductRecommendation" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="AllowProductRecommendation" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="AllowProductComparison_OverrideForStore" asp-input="AllowProductComparison" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="AllowProductComparison" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="AllowProductComparison" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="AllowQuantityEstimation_OverrideForStore" asp-input="AllowQuantityEstimation" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="AllowQuantityEstimation" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="AllowQuantityEstimation" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="MaxProductsPerAnswer_OverrideForStore" asp-input="MaxProductsPerAnswer" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="MaxProductsPerAnswer" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="MaxProductsPerAnswer" />
+                    <span asp-validation-for="MaxProductsPerAnswer"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="TrackAnalytics_OverrideForStore" asp-input="TrackAnalytics" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="TrackAnalytics" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="TrackAnalytics" />
+                </div>
+            </div>
+        </nop-card>
+
+        @* ---------- lighting calculator ---------- *@
+        <nop-card asp-name="noor-ai-lighting" asp-icon="fas fa-lightbulb" asp-title="@T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Configuration.Lighting")" asp-hide-block-attribute-name="noorAiLighting" asp-hide="true" asp-advanced="false">
+            <div class="card-body">
+                <p class="text-muted">
+                    These two numbers drive every "how many lights do I need?" answer:
+                    <code>fixtures = (area × lux target) ÷ (fixture lumens)</code>, and
+                    <code>watts = lumens ÷ efficacy</code>. Set them to match the fixtures you actually sell.
+                </p>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="DefaultLuxTarget_OverrideForStore" asp-input="DefaultLuxTarget" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="DefaultLuxTarget" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="DefaultLuxTarget" />
+                    <span asp-validation-for="DefaultLuxTarget"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="DefaultLumensPerWatt_OverrideForStore" asp-input="DefaultLumensPerWatt" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="DefaultLumensPerWatt" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="DefaultLumensPerWatt" />
+                    <span asp-validation-for="DefaultLumensPerWatt"></span>
+                </div>
+            </div>
+        </nop-card>
+
+        @* ---------- limits ---------- *@
+        <nop-card asp-name="noor-ai-limits" asp-icon="fas fa-shield-halved" asp-title="@T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Configuration.Limits")" asp-hide-block-attribute-name="noorAiLimits" asp-hide="true" asp-advanced="false">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="RateLimitMessages_OverrideForStore" asp-input="RateLimitMessages" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="RateLimitMessages" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="RateLimitMessages" />
+                    <span asp-validation-for="RateLimitMessages"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="RateLimitWindowSeconds_OverrideForStore" asp-input="RateLimitWindowSeconds" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="RateLimitWindowSeconds" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="RateLimitWindowSeconds" />
+                    <span asp-validation-for="RateLimitWindowSeconds"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="MaxMessageLength_OverrideForStore" asp-input="MaxMessageLength" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="MaxMessageLength" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="MaxMessageLength" />
+                    <span asp-validation-for="MaxMessageLength"></span>
+                </div>
+            </div>
+        </nop-card>
+
+        <div class="card card-default">
+            <div class="card-body">
+                <button type="submit" name="save" class="btn btn-primary">
+                    @T("Admin.Common.Save")
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

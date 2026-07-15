@@ -1,0 +1,257 @@
+@model AnalyticsModel
+
+@using Nop.Plugin.Misc.NoorAiAssistant.Services.Analytics
+
+@{
+    ViewBag.PageTitle = T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Analytics").Text;
+    NopHtml.SetActiveMenuItemSystemName(NoorAiAssistantDefaults.ADMIN_MENU_ANALYTICS_SYSTEM_NAME);
+
+    var prefix = NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX;
+}
+
+@* A term/count table. Both keyword reports and both product reports are the same shape, so they share
+   one local template rather than four near-identical blocks of markup. *@
+@functions {
+    private static string Percent(int count, int max)
+    {
+        return max <= 0 ? "0" : Math.Round(count * 100d / max, 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
+    }
+}
+
+<form asp-controller="NoorAiAssistantAdmin" asp-action="Analytics" method="get">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T($"{prefix}.Analytics")
+        </h1>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+
+                    @* ---------- filters ---------- *@
+                    <div class="card card-default card-search">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <div class="col-md-4"><nop-label asp-for="FromUtc" /></div>
+                                        <div class="col-md-8"><nop-editor asp-for="FromUtc" /></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <div class="col-md-4"><nop-label asp-for="ToUtc" /></div>
+                                        <div class="col-md-8"><nop-editor asp-for="ToUtc" /></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <div class="col-md-4"><nop-label asp-for="StoreId" /></div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="StoreId" asp-items="Model.AvailableStores" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="submit" class="btn btn-primary btn-search">
+                                        <i class="fas fa-magnifying-glass"></i>
+                                        @T($"{prefix}.Analytics.Apply")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* ---------- headline numbers ---------- *@
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="small-box bg-info">
+                                <div class="inner">
+                                    <h3>@Model.Summary.TotalConversations.ToString("N0")</h3>
+                                    <p>@T($"{prefix}.Analytics.Conversations")</p>
+                                </div>
+                                <div class="icon"><i class="fas fa-comments"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3>@Model.Summary.AverageConversationLength.ToString("0.#")</h3>
+                                    <p>@T($"{prefix}.Analytics.AverageLength")</p>
+                                </div>
+                                <div class="icon"><i class="fas fa-message"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3>@Model.Summary.AverageResponseTimeMs.ToString("N0")<sup style="font-size: 18px;">ms</sup></h3>
+                                    <p>@T($"{prefix}.Analytics.AverageResponseTime")</p>
+                                </div>
+                                <div class="icon"><i class="fas fa-gauge-high"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            @* the number worth acting on: every unanswered question is a gap in the FAQ or the catalogue *@
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <h3>@Model.Summary.UnansweredQuestions.ToString("N0")</h3>
+                                    <p>@T($"{prefix}.Analytics.Unanswered")</p>
+                                </div>
+                                <div class="icon"><i class="fas fa-circle-question"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6">
+                            <div class="small-box bg-light">
+                                <div class="inner">
+                                    <h3>@Model.Summary.TotalMessages.ToString("N0")</h3>
+                                    <p>@T($"{prefix}.Analytics.Messages")</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="small-box bg-light">
+                                <div class="inner">
+                                    <h3>@Model.Summary.TotalProductsRecommended.ToString("N0")</h3>
+                                    <p>@T($"{prefix}.Analytics.ProductsRecommended")</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="small-box bg-light">
+                                <div class="inner">
+                                    <h3>@Model.Summary.TotalFaqMatches.ToString("N0")</h3>
+                                    <p>@T($"{prefix}.Analytics.FaqMatches")</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-secondary">
+                        <i class="fas fa-lightbulb"></i>
+                        @T($"{prefix}.Analytics.Unanswered.Hint")
+                    </div>
+
+                    @* ---------- term reports ---------- *@
+                    <div class="row">
+                        @{
+                            var termReports = new (string Title, IList<ChatTermStat> Rows)[]
+                            {
+                                (T($"{prefix}.Analytics.TopQuestions").Text, Model.TopQuestions),
+                                (T($"{prefix}.Analytics.TopKeywords").Text, Model.TopKeywords)
+                            };
+                        }
+
+                        @foreach (var report in termReports)
+                        {
+                            var max = report.Rows.Any() ? report.Rows.Max(r => r.Count) : 0;
+
+                            <div class="col-md-6">
+                                <div class="card card-default">
+                                    <div class="card-header">@report.Title</div>
+                                    <div class="card-body p-0">
+                                        @if (!report.Rows.Any())
+                                        {
+                                            <p class="text-muted p-3 mb-0">@T($"{prefix}.Analytics.NoData")</p>
+                                        }
+                                        else
+                                        {
+                                            <table class="table table-hover mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>@T($"{prefix}.Analytics.Term")</th>
+                                                        <th style="width: 120px;">@T($"{prefix}.Analytics.Count")</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var row in report.Rows)
+                                                    {
+                                                        <tr>
+                                                            <td>@row.Term</td>
+                                                            <td>
+                                                                @* a bar rather than a bare number: the shape of the
+                                                                   distribution is the point, not the exact count *@
+                                                                <div class="progress" style="height: 16px;">
+                                                                    <div class="progress-bar bg-primary"
+                                                                         role="progressbar"
+                                                                         style="width: @(Percent(row.Count, max))%;"
+                                                                         aria-valuenow="@row.Count"
+                                                                         aria-valuemin="0"
+                                                                         aria-valuemax="@max">
+                                                                        @row.Count
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    @* ---------- product reports ---------- *@
+                    <div class="row">
+                        @{
+                            var productReports = new (string Title, IList<ChatProductStat> Rows)[]
+                            {
+                                (T($"{prefix}.Analytics.TopRecommended").Text, Model.TopRecommended),
+                                (T($"{prefix}.Analytics.TopViewed").Text, Model.TopViewed)
+                            };
+                        }
+
+                        @foreach (var report in productReports)
+                        {
+                            <div class="col-md-6">
+                                <div class="card card-default">
+                                    <div class="card-header">@report.Title</div>
+                                    <div class="card-body p-0">
+                                        @if (!report.Rows.Any())
+                                        {
+                                            <p class="text-muted p-3 mb-0">@T($"{prefix}.Analytics.NoData")</p>
+                                        }
+                                        else
+                                        {
+                                            <table class="table table-hover mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>@T($"{prefix}.Analytics.Product")</th>
+                                                        <th style="width: 90px;">@T($"{prefix}.Analytics.Count")</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var row in report.Rows)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <a asp-controller="Product" asp-action="Edit" asp-route-id="@row.ProductId">
+                                                                    @row.ProductName
+                                                                </a>
+                                                            </td>
+                                                            <td>@row.Count</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

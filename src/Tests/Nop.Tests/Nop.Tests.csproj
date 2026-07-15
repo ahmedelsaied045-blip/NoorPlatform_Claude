@@ -25,6 +25,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Presentation\Nop.Web\Nop.Web.csproj" />
+    <!-- referenced for compile-time access to plugin types under test (e.g. TextNormalizer) -->
+    <ProjectReference Include="..\..\Plugins\Nop.Plugin.Misc.NoorAiAssistant\Nop.Plugin.Misc.NoorAiAssistant.csproj" />
   </ItemGroup>
 
   <ItemGroup>

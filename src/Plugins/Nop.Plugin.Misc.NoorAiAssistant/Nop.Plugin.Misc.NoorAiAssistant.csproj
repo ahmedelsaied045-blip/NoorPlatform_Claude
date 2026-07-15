@@ -1,0 +1,93 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Copyright>Copyright © Noor</Copyright>
+    <Company>Noor</Company>
+    <Authors>Noor</Authors>
+    <RepositoryType>Git</RepositoryType>
+    <OutputPath>$(SolutionDir)\Presentation\Nop.Web\Plugins\Misc.NoorAiAssistant</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>
+    <!--This plugin has no NuGet dependencies of its own, so nothing needs copying out of the NuGet cache-->
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Content\noor-ai.css" />
+    <None Remove="Content\noor-ai.js" />
+    <None Remove="plugin.json" />
+    <None Remove="Views\_ViewImports.cshtml" />
+    <None Remove="Views\Admin\Analytics.cshtml" />
+    <None Remove="Views\Admin\Configure.cshtml" />
+    <None Remove="Views\Admin\FaqCreate.cshtml" />
+    <None Remove="Views\Admin\FaqEdit.cshtml" />
+    <None Remove="Views\Admin\FaqList.cshtml" />
+    <None Remove="Views\Admin\QuestionCreate.cshtml" />
+    <None Remove="Views\Admin\QuestionEdit.cshtml" />
+    <None Remove="Views\Admin\QuestionList.cshtml" />
+    <None Remove="Views\Admin\_CreateOrUpdateFaq.cshtml" />
+    <None Remove="Views\Admin\_CreateOrUpdateQuestion.cshtml" />
+    <None Remove="Views\Components\NoorAiAssistant.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Content\noor-ai.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\noor-ai.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="plugin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\_ViewImports.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Admin\Analytics.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Admin\Configure.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Admin\FaqCreate.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Admin\FaqEdit.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Admin\FaqList.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Admin\QuestionCreate.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Admin\QuestionEdit.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Admin\QuestionList.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Admin\_CreateOrUpdateFaq.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Admin\_CreateOrUpdateQuestion.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Components\NoorAiAssistant.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)\Presentation\Nop.Web\Nop.Web.csproj" />
+    <ClearPluginAssemblies Include="$(SolutionDir)\Build\ClearPluginAssemblies.proj" />
+  </ItemGroup>
+
+  <!-- This target execute after "Build" target -->
+  <Target Name="NopTarget" AfterTargets="Build">
+    <!-- Delete unnecessary libraries from plugins path -->
+    <MSBuild Projects="@(ClearPluginAssemblies)" Properties="PluginPath=$(OutDir)" Targets="NopClear" />
+  </Target>
+
+</Project>

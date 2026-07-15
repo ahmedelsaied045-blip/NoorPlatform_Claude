@@ -1,0 +1,51 @@
+@model SuggestedQuestionModel
+
+<div class="card-body">
+    <input asp-for="Id" type="hidden" />
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Text" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Text" />
+            <span asp-validation-for="Text"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="LanguageId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="LanguageId" asp-items="Model.AvailableLanguages" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="StoreId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="StoreId" asp-items="Model.AvailableStores" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DisplayOrder" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DisplayOrder" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Published" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Published" />
+        </div>
+    </div>
+</div>

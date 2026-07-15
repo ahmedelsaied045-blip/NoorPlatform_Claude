@@ -1,0 +1,124 @@
+@model FaqSearchModel
+
+@{
+    ViewBag.PageTitle = T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Faq").Text;
+    NopHtml.SetActiveMenuItemSystemName(NoorAiAssistantDefaults.ADMIN_MENU_FAQ_SYSTEM_NAME);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Faq")
+    </h1>
+    <div class="float-right">
+        <a asp-controller="NoorAiAssistantAdmin" asp-action="FaqCreate" class="btn btn-primary">
+            <i class="fas fa-plus-square"></i>
+            @T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Faq.AddNew")
+        </a>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row opened" data-hideAttribute="NoorAiFaqSearch">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="fas fa-chevron-up" aria-hidden="true"></i></div>
+                        </div>
+
+                        <div class="search-body">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchKeywords" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchKeywords" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchTopicId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchTopicId" asp-items="Model.AvailableTopics" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-faqs" class="btn btn-primary btn-search">
+                                        <i class="fas fa-magnifying-glass"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "faqs-grid",
+                            UrlRead = new DataUrl("FaqList", "NoorAiAssistantAdmin", null),
+                            SearchButtonId = "search-faqs",
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            Filters = new List<FilterParameter>
+                            {
+                                new(nameof(Model.SearchKeywords)),
+                                new(nameof(Model.SearchTopicId))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new(nameof(FaqModel.Question))
+                                {
+                                    Title = T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Faq.Fields.Question").Text
+                                },
+                                new(nameof(FaqModel.TopicName))
+                                {
+                                    Title = T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Faq.Fields.Topic").Text,
+                                    Width = "160"
+                                },
+                                new(nameof(FaqModel.LanguageName))
+                                {
+                                    Title = T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Faq.Fields.Language").Text,
+                                    Width = "140"
+                                },
+                                new(nameof(FaqModel.DisplayOrder))
+                                {
+                                    Title = T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Faq.Fields.DisplayOrder").Text,
+                                    Width = "100",
+                                    ClassName = NopColumnClassDefaults.CenterAll
+                                },
+                                new(nameof(FaqModel.Published))
+                                {
+                                    Title = T($"{NoorAiAssistantDefaults.LOCALE_RESOURCE_PREFIX}.Faq.Fields.Published").Text,
+                                    Width = "100",
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderBoolean()
+                                },
+                                new(nameof(FaqModel.Id))
+                                {
+                                    Title = T("Admin.Common.Edit").Text,
+                                    Width = "100",
+                                    ClassName = NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonEdit(new DataUrl("FaqEdit"))
+                                }
+                            }
+                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
